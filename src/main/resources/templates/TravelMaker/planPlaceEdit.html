@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+  <title>일정 수정</title>
+  <link rel="stylesheet" href="/css/common/reset.css" />
+  <link rel="stylesheet" href="/css/TravelMaker/planPlace.css" />
+  <script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=yw4z47fg6r"></script>
+  <script type="module" src="/js/TravelMaker/planPlaceEdit.js"></script>
+</head>
+
+<body>
+
+  <form id="finalForm" action="final" method="post" style="display: none;">
+    <input type="text" id="managementId" name="managementId">
+    <input type="text" id="planId" name="planId">
+    <input type="text" id="trvlStd" name="trvlStd">
+    <input type="text" id="trvlLsd" name="trvlLsd">
+    <input type="text" id="ragionNm" name="ragionNm">
+  </form>
+
+  <div class="travel_maker">
+    <div class="left-container">
+      <!-- id 추가 -->
+      <div class="left_top">
+        <h2 id="planRagion" th:text="${ragionNm}"></h2>
+        <button id="register_btn">수정</button>
+      </div>
+      <div class="date">
+        <span th:text="${trvlStd}" class="trvlStd">시작날짜</span>
+        <span>~</span>
+        <span th:text="${trvlLsd}" class="trvlLsd">종료날짜</span>
+      </div>
+      <div id="search">
+        <div class="search_box">
+          <input type="search" class="input_text" name="" id="" />
+          <button class="input_button">검색</button>
+        </div>
+      </div>
+
+      <div class="cate">
+        <select name="cate_select">
+          <option value="A00">전체</option>
+          <option value="A01">관광지</option>
+          <option value="A02">문화시설</option>
+          <option value="A03">축제/공연/행사</option>
+          <option value="A04">레포츠</option>
+          <option value="A05">숙박</option>
+          <option value="A06">쇼핑</option>
+          <option value="A07">음식</option>
+        </select>
+        <select name="food_select">
+          <option value="A07">전체</option>
+          <option value="A0701">한식</option>
+          <option value="A0702">서양식</option>
+          <option value="A0703">일식</option>
+          <option value="A0704">중식</option>
+          <option value="A0705">이색음식점</option>
+          <option value="A0706">카페/전통찻집</option>
+          <option value="A0707">클럽</option>
+        </select>
+      </div>
+
+      <div class="item_wrap">
+        <!-- item 반복 시작-->
+        <!-- */
+      <div class="item">
+        <img src="/img/logo.png" alt="이미지" />
+        <span>제목</span>
+        <div class="check-button"></div>
+      </div>
+      */ -->
+        <!-- item 반복 끝 -->
+      </div>
+
+      <div id="pagination"></div>
+    </div>
+
+    <div class="plan-container">
+      <div class="plan_title">
+        <th:block th:each="i : ${#numbers.sequence(1, day)}">
+          <input type="radio" name="tabmenu" th:id="'tab0' + ${i}" th:checked="${i == 1}">
+          <label th:for="'tab0' + ${i}">[[${i}]]일차</label>
+        </th:block>
+      </div>
+
+      <th:block th:each="i : ${#numbers.sequence(1, day)}">
+        <div th:class="'conbox con' + ${i}">
+          <form th:id="'form' + ${i}" class="plan_wrap">
+
+            <!-- 해당 일차에 맞는 아이템만 반복 -->
+            <div class="item" th:each="trvlItem : ${trvlPlans}" th:if="${trvlItem.trvlDay} == ${i}"
+              th:data-trvl-x="${trvlItem.trvlX}" th:data-trvl-y="${trvlItem.trvlY}" th:data-trvl-id="${trvlItem.trvlCd}">
+              <div class="circle-button">1</div>
+              <img class="img" th:src="${trvlItem.img != null} ? ${trvlItem.img} : '/img/main_logo.png'" />
+              <span th:text="${trvlItem.trvlNm}">여행지이름</span>
+              <div class="button-wrap">
+                <div class="distance-button">🗺️</div>
+                <div class="delete-button">❌</div>
+              </div>
+            </div> <!-- 아이템 반복 끝 -->
+
+          </form>
+        </div>
+      </th:block>
+    </div>
+
+
+
+    <div id="map"></div>
+
+  </div>
+
+
+  <!-- 리스트 아이템-->
+  <template id="trvlItem">
+    <div class="item">
+      <img src="" alt="이미지" />
+      <span></span>
+      <div class="check-button"></div>
+    </div>
+  </template>
+
+  <script type="module" th:inline="javascript" async>
+    import { Pagination } from "/js/common/paging.js";
+    const pagination = new Pagination(8, 5);
+
+    const cateSelect = document.querySelector(
+      'select[name="cate_select"]'
+    );
+    const foodSelect = document.querySelector(
+      'select[name="food_select"]'
+    );
+
+    // 카테고리값 저장할 변수
+    let selectedValue = "A00";
+    let keyword = "";
+    let trvlX = 0.0;
+    let trvlY = 0.0;
+
+    // 지역별 여행지 모두 불러오기
+    fetchRagionTravelSpots();
+
+    async function fetchRagionTravelSpots() {
+      const reqPage = pagination.currentPage; //요청 페이지
+      const reqCnt = pagination.recordsPerPage;
+      const ragion =
+        document.getElementById("planRagion").textContent;
+
+      const data = {
+        reqPage: reqPage,
+        reqCnt: reqCnt,
+        ragion: ragion,
+        keyword: keyword,
+        tagValue: selectedValue,
+        trvlX: trvlX,
+        trvlY: trvlY,
+      };
+
+      const url = `http://localhost:9080/api/travelmaker/all`;
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json", // JSON 형식으로 요청을 보내기 위한 헤더 설정
+          },
+          body: JSON.stringify(data),
+        });
+        const result = await res.json();
+        //  요청및 응답성공
+        if (result.header.rtcd == "00") {
+          console.log(result);
+          // 기존의 item_wrap 안에있던 아이템 다 삭제
+          const itemLst = document.querySelectorAll(".item_wrap");
+          itemLst.forEach((item) => {
+            while (item.firstChild) {
+              item.removeChild(item.firstChild);
+            }
+          });
+
+          result.body.forEach((item) => {
+            console.log(item);
+            const $trvlItem = document
+              .getElementById("trvlItem")
+              .content.cloneNode(true)
+              .querySelector(".item");
+            $trvlItem.dataset.trvlId = item.trvlCd;
+            $trvlItem.dataset.trvlX = item.trvlX;
+            $trvlItem.dataset.trvlY = item.trvlY;
+
+            // $trvlItem.querySelector("img").src = item.img;
+            // 대체 이미지 설정
+            const imgElement = $trvlItem.querySelector("img");
+            imgElement.src = item.img
+              ? item.img
+              : "/img/main_logo.png";
+
+            $trvlItem.querySelector("span").textContent =
+              item.trvlNm;
+
+            document
+              .querySelector(".item_wrap")
+              .appendChild($trvlItem);
+          });
+          pagination.setTotalRecords(result.totalCnt);
+          pagination.displayPagination(fetchRagionTravelSpots);
+        } else {
+          new Error("목록 실패!!");
+        }
+      } catch (err) {
+        console.log(err.message);
+      } finally {
+      }
+    }
+
+    // 검색, 거리순정렬 이벤트발생 코드
+    // -----------------------------------------------------------
+
+    // 검색 버튼 클릭 이벤트
+    document
+      .querySelector(".input_button")
+      .addEventListener("click", function (event) {
+        event.preventDefault();
+
+        // 카테고리값 불러와서 SelectedValue에 저장
+        if (
+          cateSelect.value === "A07" &&
+          foodSelect.style.display === "block" &&
+          foodSelect.value !== "A07"
+        ) {
+          selectedValue = foodSelect.value;
+        } else {
+          selectedValue = cateSelect.value;
+        }
+        keyword = document
+          .querySelector(".input_text")
+          .value.trim();
+        console.log("Selected Value:", selectedValue);
+        console.log("keyword:", keyword);
+        pagination.currentPage = 1;
+        pagination.setCurrentPageGroupStart(1);
+        fetchRagionTravelSpots();
+      });
+
+    // Enter 키 입력 시 폼 제출
+    document.addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        document.querySelector(".input_button").click(); // 버튼 클릭 이벤트 발생
+      }
+    });
+
+    // 거리순정렬버튼 누르면 선택한 여행지 반경 3km이내의 여행지 추천
+document.querySelector('.plan-container').addEventListener('click', function(event) {
+    // 클릭된 요소가 distance-button 클래스를 가지고 있는지 확인
+    if (event.target.classList.contains('distance-button')) {
+        let item = event.target.closest(".item");
+        console.log(item);
+
+        keyword = "";
+        selectedValue = "A00";
+        trvlX = item.getAttribute("data-trvl-x");
+        trvlY = item.getAttribute("data-trvl-y");
+        pagination.currentPage = 1;
+        pagination.setCurrentPageGroupStart(1);
+        fetchRagionTravelSpots();
+    }
+});
+
+
+
+    // 여행일정 최종 등록
+    document.getElementById('register_btn').addEventListener('click', function () {
+
+      const planWraps = document.querySelectorAll('.plan_wrap');
+    let isEmptyFound = false;
+
+     // 모든 plan_wrap 요소를 검사하여 자식 요소의 유무를 확인
+    for (const wrap of planWraps) {
+    if (wrap.children.length === 0) {
+      isEmptyFound = true;
+      break;
+    }
+  }
+
+  // 하나라도 자식 요소가 없는 plan_wrap이 있다면 경고창 표시
+  if (isEmptyFound) {
+    alert('일차별로 1개 이상의 여행지를 넣어주세요');
+    return; // 여기에서 함수 실행을 중단
+  } 
+
+
+
+      const formattedStd = formatDate(document.querySelector(".trvlStd").textContent);
+      const formattedLsd = formatDate(document.querySelector(".trvlLsd").textContent);
+
+      // 결과 문자열을 만듭니다.
+      const result = `${formattedStd} ~ ${formattedLsd}`;
+
+      function collectFormData() {
+        const formData = {
+          planTabs: [],
+          plan_id: [[${ planId }]],
+          ragion_nm: [[${ ragionNm }]],
+          planDays: result,
+        };
+        let day = 1;
+        let pmId = 1;
+        document.querySelectorAll('.conbox').forEach(tabDiv => {
+          const items = [];
+
+          tabDiv.querySelectorAll('.item').forEach(itemDiv => {
+            const planItem = {
+              trvl_id: itemDiv.getAttribute('data-trvl-id'),
+              trvl_x: itemDiv.getAttribute('data-trvl-x'),
+              trvl_y: itemDiv.getAttribute('data-trvl-y'),
+              trvl_day: day.toString(),
+              trvl_time: "00000000",
+              trvl_stime: "00000000",
+              comment: ""
+
+            };
+            pmId += 1;
+            // itemDiv.querySelectorAll('input[type="text"]').forEach(input => {
+            //    planItem[input.name] = input.value;
+            // });
+            items.push(planItem);
+          });
+          formData.planTabs.push({ planItems: items });
+          day += 1;
+
+        });
+        return formData;
+      }
+
+
+      const formData = collectFormData();
+      console.log(JSON.stringify(formData));
+      savePlan();
+
+      async function savePlan() {
+        try {
+          const url = 'http://localhost:9080/api/travelmaker/update/planner';
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+          })
+          const result = await res.json();
+          if (result.header.rtcd == "00") {
+            console.log(result);
+
+            document.getElementById('managementId').value = result.body.managementId;
+            document.getElementById('planId').value = result.body.planId;
+            document.getElementById('trvlStd').value = result.body.trvlStd;
+            document.getElementById('trvlLsd').value = result.body.trvlLsd;
+            document.getElementById('ragionNm').value = result.body.ragionNm;
+
+
+            // 폼 자동 제출 (필요한 경우)
+            document.getElementById('finalForm').submit();
+
+          }
+          else {
+            new Error("목록 실패!!");
+          }
+        }
+        catch (error) {
+          console.error('Error:', error);
+        }
+      }
+
+    });
+
+
+    // 날짜를 "YYYY-MM-DD" 형식에서 "M월D일" 형식으로 변환합니다.
+function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    const month = date.getMonth() + 1; // 월은 0부터 시작하므로 1을 더합니다.
+    const day = date.getDate();
+    return `${month}월 ${day}일`;
+}
+
+
+
+
+
+
+
+
+
+
+  </script>
+</body>
+
+</html>

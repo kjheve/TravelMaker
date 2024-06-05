@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport"
+				content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no" />
+	<title>작성된 여행일정</title>
+	<link rel="stylesheet" href="/css/common/reset.css" />
+	<link rel="stylesheet" href="/css/TravelMaker/planResult.css" />
+	<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=n8exfj66ne"></script>
+	<script type="module" src="/js/TravelMaker/planResult.js"></script>
+</head>
+
+<body>
+<div class="travel_maker">
+
+	<form
+    id="modifyForm"
+    autocomplete="off"
+    action="/travelmaker/modify"
+    method="post"
+>
+  <input type="hidden" name="planId" th:value="${planId}" />
+  <input type="hidden" name="ragionNm" />
+  <input type="hidden" name="trvlStd" />
+  <input type="hidden" name="trvlLsd" />
+</form>
+
+	<div class="plan-container">
+		<div class="top">
+			<h2 id="planRagion" th:text="${ragionNm}">지역명</h2>
+			<div class="date">
+				<span th:text="${trvlStd}" id="trvlStd">시작날짜</span>
+				<span>~</span>
+				<span th:text="${trvlLsd}" id="trvlLsd">종료날짜</span>
+			</div>
+		</div>
+		<ul class="button_wrap">
+			<li><a href="#">일정공유</a></li>
+			<li><a id="modifyBtn" >일정수정</a></li>
+			<li><a href="/mypage">나의 여행일정</a></li>
+		</ul>
+
+		<div class="plan_title">
+			<th:block th:each="i : ${#numbers.sequence(1, days)}">
+				<input type="radio" name="tabmenu" th:id="'tab0' + ${i}" th:checked="${i == 1}">
+				<label th:for="'tab0' + ${i}">[[${i}]]일차</label>
+			</th:block>
+		</div>
+
+		<th:block th:each="i : ${#numbers.sequence(1, days)}">
+			<div th:class="'conbox con' + ${i}">
+				<div id="item_wrap">
+					<!-- 해당 일차에 맞는 아이템만 반복 -->
+					<div class="item" th:each="trvlItem : ${trvlPlans}" th:if="${trvlItem.trvlDay} == ${i}"
+							 th:data-trvl-x="${trvlItem.trvlX}" th:data-trvl-y="${trvlItem.trvlY}">
+						<div class="circle">1</div>
+						<img class="img" th:src="${trvlItem.img != null} ? ${trvlItem.img} : '/img/main_logo.png'" />
+						<span th:text="${trvlItem.trvlNm}">여행지이름</span>
+					</div> <!-- 아이템 반복 끝 -->
+				</div>
+			</div>
+		</th:block>
+
+	</div>
+
+
+
+	<div id="map"></div>
+
+</div> <!-- div.travel_maker 종료 -->
+
+
+</body>
+
+</html>

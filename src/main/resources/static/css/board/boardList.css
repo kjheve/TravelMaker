@@ -1,0 +1,247 @@
+.tab_content {
+  margin: 115px 20px 50px 20px;
+  width: 98%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper {
+  width: 80%;
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"]+label {
+  display: inline-block;
+  padding: 20px;
+  background-color: #f5f5f5;
+  /* 선택 안된 배경색 */
+  color: #999;
+  /* 선택 안된 글자색 */
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+/* 체크 되어있는 글자색과 배경색 (덮어씌우기) */
+input[type="radio"]:checked+label {
+  background: #7992BC;
+  color: white;
+  font-weight: bold;
+}
+
+.conbox {
+  margin-top: -15px;
+  /* height : 680px 게시판 10개 맞춤 */
+  /* height: 680px; */
+  width: 100%;
+  background: #7992BC;
+  display: none;
+  /* font-size: 12px; */
+  padding: 20px;
+  position: relative;
+  box-shadow: 5px 5px 5px gray;
+}
+
+input[id="tab01"]:checked~.con1 {
+  display: block;
+}
+
+input[id="tab02"]:checked~.con2 {
+  display: block;
+}
+
+/* ------------------탭박스 끝---------------------- */
+
+.board_wrapper {
+  background-color: #F1FAFF;
+  border-radius: 10px;
+  padding: 30px;
+  width: 100%;
+  height: 100%;
+}
+
+.board_wrapper>*:nth-of-type(1) {
+  margin-bottom: 30px;
+}
+
+.board_wrapper>*:nth-of-type(3) {
+  margin-top: 60px;
+}
+
+/* ----------------- */
+
+.search_box {
+  display: flex;
+}
+
+.search_freeboard {
+  width: calc(100% - 60px);
+  height: 40px;
+  padding: 0px 0px 0px 6px;
+  border: 2px solid #dfe3e8;
+  border-right: none;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+
+}
+.search_shareboard{
+  width: calc(100% - 60px);
+  height: 40px;
+  padding: 0px 0px 0px 6px;
+  border: 2px solid #dfe3e8;
+  border-right: none;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+}
+
+.search_button {
+  width: 60px;
+  height: 40px;
+  border: none;
+  border-left: none;
+  border-radius: 0 5px 5px 0;
+  color: white;
+  background-color: #2c4d8a;
+  transition: background-color 0.3s;
+}
+
+.search_button:hover {
+  background-color: #365899;
+  cursor: pointer;
+}
+
+/* --- 검색창 끝 --- */
+
+.board_header {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+
+/* -----테이블 시작-------- */
+
+.board_section {
+  /* .board_section : 680px과
+      .conbox : 440px
+      고정되어있는 height 수정하면 게시판 늘어남 */
+  /* height: 440px; */
+  border-collapse: collapse;
+
+  /* 테이블 테두리 하나로 합치기*/
+}
+
+.table {
+  width: 100%;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  background-color: #7992BC;
+  color: #fff;
+}
+
+th,
+td {
+  border-bottom: 1px solid #ddd;
+  padding: 10px 20px;
+  word-break: break-all;
+  text-align: center;
+}
+
+tr:hover td {
+  color: #000;
+  cursor: pointer;
+  background-color: #F1FAFF;
+}
+
+tr {
+  display: flex;
+}
+
+.tn {
+  flex: 1;
+  flex-basis: 10px;
+}
+
+.tt {
+  flex: 5;
+}
+
+.tw {
+  flex: 2;
+}
+
+.td {
+  flex: 3;
+  flex-basis: 20px;
+}
+
+.tr,
+.tl {
+  flex: 2;
+  flex-basis: 10px;
+}
+
+/* --- 테이블 종료 --- */
+
+.board_footer {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.board_del,
+.board_add {
+  border: none;
+  background-color: #2c4d8a;
+  color: #fff;
+  padding: 15px 15px 15px 15px;
+}
+
+.board_del:hover,
+.board_add:hover {
+  background-color: #5e687a;
+  cursor: pointer;
+}
+
+
+/* 페이지네이션 임시 */
+.pagination {
+  display: flex;
+  /* justify-content: flex-start; */
+}
+
+.pagination button.pg {
+  padding: 10px;
+  /* border: 2px solid #d5d0d0; */
+  height: 40px;
+  width: 40px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 50%;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  background-color: #fffac5;
+  color: #222936;
+  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.75);
+  margin: 0 5px;
+  cursor: pointer;
+  border: none; /* 버튼의 기본 테두리를 제거 */
+}
+
+.pagination button.pg:hover {
+  background-color: rgb(245, 239, 151);
+}
+.pagination button.pg.active {
+  background-color: rgb(245, 239, 151);
+  color: white; 
+  box-shadow: 0 0 10px #afa54c; /* 테두리가 빛나는 효과를 추가합니다. */
+}

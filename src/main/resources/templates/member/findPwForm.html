@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>비밀번호찾기</title>
+  <link href="/css/common/reset.css" rel="stylesheet">
+  <link href="/css/common/header.css" rel="stylesheet">
+  <link href="/css/common/footer.css" rel="stylesheet">
+  <link href="/css/member/findPwForm.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+  <div class="header">
+    <div class="header_wrapper">
+      <div class="header_start">
+        <a href="/selectMenu"><img src="/img/logo.png" alt="로고"></a>
+      </div>
+      <div class="header_center">
+        <p class="title_name">비밀번호찾기</p>
+      </div>
+      <ul class="nav">
+        <a class="reco" href="/travelSearch">여행지 검색</a>
+        <li class="dropdown">
+          <a class="mypage" href="#">마이페이지</a>
+          <ul class="dropdown_content">
+            <li><a class="myplan" href="#">나의 여행일정</a></li>
+            <li><a class="info_edit" href="#">나의 정보수정</a></li>
+          </ul>
+        </li>
+        <a class="login" href="/login">로그인</a>
+      </ul>
+    </div>
+  </div>
+
+  <section>
+    <div class="section_wrap">
+      <form method="post">
+        <input type="text" placeholder="아이디를 입력하세요." name="memberId" id="memberId" class="input" required>
+        <div class="email-check">
+          <input type="email" placeholder="이메일을 입력하세요." name="email" id="email" class="input" required>
+          <p id="msg"></p>
+          <button type="button" id="findPwbtn">비밀번호찾기</button>
+        </div>
+      </form>
+
+    </div>
+  </section>
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="footer_main">
+      <p>트래블메이커</p>
+      <p>주소: 울산광역시 남구 삼산로35번길 19 (신정동) </p>
+      <p>Tel : 052-123-5678</p>
+    </div>
+    <!-- 푸터_카피라이트 -->
+    <div class="footer_copyright">
+      <p>Copyright © TravelMaker. All Rights Reserved.</p>
+    </div>
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', init);
+    function init() {
+      const chkBtn = document.getElementById('findPwbtn');
+      const memberId = document.getElementById('memberId');
+      const email = document.getElementById('email');
+      const msg = document.getElementById('msg');
+
+      chkBtn.addEventListener('click', evt => chkValid(evt, memberId, email, msg, chkBtn));
+    }
+
+    function chkValid(evt, memberId, email, msg, chkBtn) {
+      evt.preventDefault();
+      console.log(evt);
+      if (memberId.value.trim().length === 0) {
+        memberId.focus();
+        return;
+      }
+      if (email.value.trim().length === 0) {
+        email.focus();
+        return;
+      }
+      msg.textContent = '전송중...';
+      postData(memberId, email, msg, chkBtn);
+    }
+
+    async function postData(memberId, email, msg, chkBtn) {
+      const payload = {
+        'memberId': memberId.value,
+        'email': email.value
+      }
+
+      const url = '/members/findPwd';
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'  // JSON 형태로 데이터 전송
+        },
+        body: JSON.stringify(payload)  // js객체 => 요청메시지 바디 JSON포맷 문자열로 변환
+      }
+
+      try {
+        const res = await fetch(url, options);
+
+        const result = await res.json();  // 응답메시지 바디 JSON포맷 문자열 => js객체 변환
+        if (result.header.rtcd === '21') {
+          console.log('임시비밀번호 메일전송');
+          msg.textContent = '임시비밀번호가 전송되었습니다.';
+          chkBtn.disabled = false;  // 버튼 비활성화
+          chkBtn.innerText = '로그인하러가기';
+           chkBtn.addEventListener('click', () => window.location.href = `/login`); // 버튼 클릭시 로그인 페이지로 이동
+        } else if (result.header.rtcd === '22') {
+          console.log('회원정보없음');
+          msg.textContent = '회원정보없음';
+        } else {
+          console.log('기타오류');
+          msg.textContent = '기타오류 발생';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        msg.textContent = '서버 오류 발생';
+      }
+    }
+  </script>
+</body>
+
+</html>

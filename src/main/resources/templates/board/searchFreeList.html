@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>커뮤니티</title>
+  <link href="/css/common/reset.css" rel="stylesheet">
+  <link href="/css/common/header.css" rel="stylesheet">
+  <link href="/css/common/footer.css" rel="stylesheet">
+  <link href="/css/board/boardList.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="header">
+  <div class="header_wrapper">
+    <div class="header_start">
+      <a href="/selectMenu"><img src="/img/logo.png" alt="로고"></a>
+    </div>
+    <div class="header_center">
+      <p class="title_name" onclick="location.href='/board/free';">커뮤니티</p>
+    </div>
+    <ul class="nav">
+      <a href="#" th:text="${session.loginMember.nickname}+'님'"></a>
+      <li class="dropdown">
+        <a class="mypage" href="#">마이페이지</a>
+        <ul class="dropdown_content">
+          <li><a class="myplan" href="/mypage">나의 여행일정</a></li>
+          <li><a class="info_edit" th:href="@{'/members/' + ${session.loginMember.memberId}}">나의 정보수정</a></li>
+        </ul>
+      </li>
+      <a class="logout" href="#" onclick="logout()">로그아웃</a>
+    </ul>
+  </div>
+</div>
+
+<div class="tab_content">
+  <div class="wrapper">
+    <input type="radio" name="tabmenu" id="tab01" checked>
+    <label for="tab01" onclick="location.href='/board/free';">자유 게시판</label>
+    <input type="radio" name="tabmenu" id="tab02">
+    <label for="tab02" onclick="location.href='/board/share';">공유 게시판</label>
+
+    <!-- 자유게시판 -->
+    <div class="conbox con1">
+      <div class="board_wrapper">
+        <!-- 게시판 헤더 -->
+        <div class="board_header">
+          <form action="/board/free/search" method="get">
+            <div class="search_box">
+              <input type="hidden" name="codeId" value="F0101">
+              <input type="search" class="search_freeboard" name="word" id="word" placeholder="검색어 입력">
+              <button type="submit" class="search_button">검색</button>
+            </div>
+          </form>
+        </div>
+
+
+        <!-- 게시판 세션 (게시판목록) -->
+        <div class="board_section">
+          <table class="table">
+            <thead>
+              <tr>
+                <!-- <th class="ck"><input type="checkbox" id="selectAll"></th>-->
+                <th class="tn">번호</th>
+                <th class="tt">제목</th>
+                <th class="tw">작성자</th>
+                <th class="td">작성일</th>
+                <th class="tr">조회수</th>
+                <th class="tl">좋아요</th>
+              </tr>
+            </thead>
+            <tbody>
+            <!-- 테이블행 반복 -->
+              <tr class="free_board" th:each="i : ${freeList}" th:data-bbs-id="${i.bbsId}">
+                <!--<td class="ck"><input type="checkbox" name=""></td>-->
+                <td class="tn" th:text="${i.bbsId}">123</td>
+                <td class="tt clickable-title" th:text="${i.title}">제목임</td>
+                <td class="tw" th:text="${i.nickname}">닉네임임</td>
+                <td class="td" th:text="${#temporals.format(i.cdate,'yyyy-MM-dd')}">작성일자임</td>
+                <td class="tr" th:text="${i.hit}">777</td>
+                <td class="tl" th:text="${i.good}">777</td>
+              </tr> <!-- 테이블행 반복 끝 -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 게시판 하단 -->
+        <div class="board_footer">
+          <!-- 더미 div -->
+          <div></div>
+          <!-- 페이지네이션을 위한 div -->
+          <div class="pagination" id="pagination" data-total-pages="${totalPages}" data-current-page="${currentPage}" data-codeid="${codeId}" data-word="${word}">
+          </div>
+
+
+
+          <!-- 글쓰기 버튼 -->
+          <div class="btn_wrap">
+            <button class="board_add">글쓰기</button>
+            <button class="board_del" style="display:none">삭제</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> <!-- 자유게시판 끝 -->
+</div>
+
+
+<!-- 푸터 -->
+<footer>
+  <div class="footer_main">
+    <p>트래블메이커</p>
+    <p>주소: 울산광역시 남구 삼산로35번길 19 (신정동) </p>
+    <p>Tel : 052-123-5678</p>
+  </div>
+  <!-- 푸터_카피라이트 -->
+  <div class="footer_copyright">
+    <p>Copyright © TravelMaker. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script th:inline="javascript">
+  // 게시글 조회
+  document.addEventListener('DOMContentLoaded', function () {
+  // "clickable-title" 클래스를 가진 모든 요소에 대해 함수를 실행합니다.
+    document.querySelectorAll('.clickable-title').forEach(function (evt) {
+      evt.addEventListener('click', function () {
+        // 클릭된 요소의 부모인 tr에서 data-bbs-id 속성값을 읽습니다.
+        const bbsId = this.closest('tr').getAttribute('data-bbs-id');
+        // 해당 게시글의 상세 페이지로 이동합니다.
+        location.href = `/board/${bbsId}/detail`;
+      });
+    });
+  });
+
+  // 게시글 작성 (글쓰기)
+  document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.board_add').forEach(function(button){
+      button.addEventListener('click', function() {
+        location.href = '/board/add';
+      });
+    })
+  });
+
+  // 페이지네이션
+document.addEventListener("DOMContentLoaded", function() {
+    const paginationDiv = document.getElementById('pagination');
+    const totalPages = [[${totalPages}]];
+    const currentPage = [[${currentPage}]];
+    const codeId = [[${codeId}]];
+    const word = [[${word}]];
+    const windowSize = 5; // 한 화면에 보여줄 페이지 번호의 개수
+
+    function createButton(page, text, isActive, isDisabled) {
+        const button = document.createElement('button');
+        button.textContent = text;
+        button.setAttribute('data-page', page);
+        button.setAttribute('data-codeid', codeId);
+        button.setAttribute('data-word', word);
+        button.classList.add('pg');
+        if (isActive) button.classList.add('active');
+        if (isDisabled) button.setAttribute('disabled', 'true');
+        return button;
+    }
+
+    function renderPagination(currentPage, totalPages) {
+        paginationDiv.innerHTML = ''; // 기존 버튼 제거
+
+        const startPage = Math.floor((currentPage - 1) / windowSize) * windowSize + 1;
+        const endPage = Math.min(startPage + windowSize - 1, totalPages);
+
+        if (currentPage > 1) {
+            const firstPageButton = createButton(1, '<<', false, false);
+            const prevPageButton = createButton(currentPage - 1, '<', false, false);
+            paginationDiv.appendChild(firstPageButton);
+            paginationDiv.appendChild(prevPageButton);
+        }
+
+        for (let page = startPage; page <= endPage; page++) {
+            const isActive = (page === currentPage);
+            const pageButton = createButton(page, page, isActive, false);
+            paginationDiv.appendChild(pageButton);
+        }
+
+        if (currentPage < totalPages) {
+            const nextPageButton = createButton(currentPage + 1, '>', false, false);
+            const lastPageButton = createButton(totalPages, '>>', false, false);
+            paginationDiv.appendChild(nextPageButton);
+            paginationDiv.appendChild(lastPageButton);
+        }
+    }
+
+    paginationDiv.addEventListener('click', function(event) {
+        if (event.target.tagName === 'BUTTON') {
+            const page = event.target.getAttribute('data-page');
+            const codeId = event.target.getAttribute('data-codeid');
+            const word = encodeURIComponent(event.target.getAttribute('data-word'));
+            location.href = `/board/free/search?page=${page}&codeId=${codeId}&word=${word}`;
+        }
+    });
+
+    renderPagination(currentPage, totalPages);
+});
+
+
+
+  // (관리자) 게시글 체크 및 삭제버튼 활성화
+
+</script>
+
+</body>
+
+</html>

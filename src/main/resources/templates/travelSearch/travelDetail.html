@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>여행지 상세정보</title>
+		<link href="/css/common/reset.css" rel="stylesheet" />
+		<link href="/css/common/header.css" rel="stylesheet" />
+		<link href="/css/common/footer.css" rel="stylesheet" />
+		<link href="/css/TravelSearch/travelDetail.css" rel="stylesheet" />
+  	<script src="/js/TravelSearch/travelDetail.js" defer></script>
+		<script src="/js/logout.js"></script>
+	</head>
+	<body>
+		<!-- 헤더 -->
+		<div class="header">
+			<div class="header_wrapper">
+				<div class="header_start">
+					<a href="/selectMenu"><img src="/img/logo.png" alt="로고" /></a>
+				</div>
+				<div class="header_center">
+					<p class="title_name">여행지 상세정보</p>
+				</div>
+
+				<!-- 회원인 경우 -->
+				<th:block th:if="${session.loginMember}">
+				<ul class="nav">
+					<a href="#" th:text="${session.loginMember.nickname}+'님'"></a>
+					<li class="dropdown">
+						<a class="mypage" href="#">마이페이지</a>
+						<ul class="dropdown_content">
+							<li>
+								<a class="myplan" href="/mypage">나의 여행일정</a>
+							</li>
+							<li>
+								<a class="info_edit" th:href="@{'/members/' + ${session.loginMember.memberId}}">나의 정보수정</a>
+							</li>
+						</ul>
+					</li>
+					<a class="logout" href="#" onclick="logout()">로그아웃</a>
+				</ul>
+				</th:block>
+
+				<!-- 비회원인 경우 -->
+				<th:block th:unless="${session.loginMember}">
+					<ul class="nav">
+						<a href="#" th:text="비회원님"></a>
+						<a class="login" href="/login">로그인</a>
+						<a class="join" href="/members/join">회원가입</a>
+					</ul>
+				</th:block>
+
+			</div>
+		</div>
+
+		<!-- 바디 -->
+		<div class="data_container"></div>
+
+		<!-- 푸터 -->
+		<footer>
+			<div class="footer_main">
+				<p>트래블메이커</p>
+				<p>주소: 울산광역시 남구 삼산로35번길 19 (신정동)</p>
+				<p>Tel : 052-123-5678</p>
+			</div>
+			<!-- 푸터_카피라이트 -->
+			<div class="footer_copyright">
+				<p>Copyright © TravelMaker. All Rights Reserved.</p>
+			</div>
+		</footer>
+		<script type="text/javascript">
+			const trvlCd = [[${trvlCd}]];
+		</script>
+	</body>
+</html>

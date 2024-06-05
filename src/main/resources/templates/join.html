@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입</title>
+  <link href="/css/common/reset.css" rel="stylesheet">
+  <link href="/css/common/header.css" rel="stylesheet">
+  <link href="/css/common/footer.css" rel="stylesheet">
+  <link href="/css/joinForm.css" rel="stylesheet">
+  <!--async : html dom트리 형성후 수행됨  -->
+  <script type="module" src="/js/join.js"></script>
+  <style>
+    .errmsg {
+      color: red; /* 빨간색으로 설정 */
+      display: block; /* 한 줄에 표시되도록 설정 */
+      margin-top: 5px; /* 위쪽 여백 추가 */
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="header" >
+  <div class="header_wrapper">
+    <div class="header_start">
+      <a href="/selectMenu"><img src="/img/logo.png" alt="로고"></a>
+    </div>
+    <div class="header_center">
+      <p class="title_name">회원가입</p>
+    </div>
+    <ul class="nav">
+      <a class="reco" href="/travelSearch">여행지 검색</a>
+      <a class="login" href="/login">로그인</a>
+    </ul>
+  </div>
+</div>
+
+<section>
+  <!-- 약관 -->
+  <div class="provision">
+    <div class="provision_wrapper">
+      <div class="checkmsg all">
+        <input type="checkbox" name="">
+        <label for="">전체 동의하기</label>
+      </div>
+      <textarea name="" id="" readonly>
+본 이용약관은 TravelMaker (이하 "당사")가 제공하는 모든 서비스(이하 "서비스")의 이용에 대한 규정을 명시합니다.
+회원은 본 약관에 동의함으로써 당사의 서비스 이용에 대한 모든 권리와 의무를 이해하고 준수해야 합니다.
+
+1. 서비스 이용
+당사의 서비스는 회원이 온라인으로 여행 계획을 세울수 있도록 지원합니다.
+회원은 서비스 이용 시 타인의 권리를 침해하지 않도록 해야 합니다.
+
+2. 회원 계정
+회원 가입 시 제공한 정보는 정확하고 최신의 정보여야 합니다.
+회원은 자신의 계정 정보를 비밀로 유지해야 하며, 계정의 부정 사용에 대한 책임은 회원 본인에게 있습니다.
+
+3. 이용 제한
+당사는 회원이 본 약관을 위반하는 경우 서비스 이용을 제한하거나 계정을 해지할 권리를 가집니다.
+
+4. 면책 조항
+당사는 회원이 서비스 이용으로 인해 발생하는 직접 또는 간접적인 손해에 대해 책임을 지지 않습니다.
+
+5. 약관의 변경
+당사는 필요에 따라 본 약관을 변경할 수 있으며, 변경된 약관은 웹사이트에 공지함으로써 효력이 발생합니다.
+        </textarea>
+      <div class="checkmsg essential">
+        <input type="checkbox" name="">
+        <label for="">[필수] 트래블 메이커 이용약관</label>
+      </div>
+      <textarea name="" id="" readonly>
+개인정보 수집 및 이용 동의
+당사는 회원님의 개인정보를 소중히 여기며, 아래와 같은 목적으로 개인정보를 수집하고 이용합니다.
+
+1. 수집하는 개인정보 항목
+이름, 이메일 주소, 전화번호 등
+개인정보 수집 및 이용 목적
+
+2. 회원 관리: 회원 가입 의사 확인, 본인 식별 및 인증, 회원 자격 유지 및 관리
+
+3. 개인정보 보유 및 이용 기간
+회원 탈퇴 시까지 또는 법령에 따른 보존 의무 기간 동안
+
+4. 동의 거부 권리
+회원은 개인정보 수집 및 이용에 대해 동의를 거부할 권리가 있으며, 동의 거부 시 서비스 이용이 제한될 수 있습니다.
+        </textarea>
+      <div class="checkmsg essential">
+        <input type="checkbox" name="">
+        <label for="">[필수] 개인정보 수집 및 이용</label>
+      </div>
+      <textarea name="" id="" readonly>
+본 위치기반 서비스 이용약관(이하 "위치약관")은 [웹서비스 이름]이 제공하는 위치기반 서비스(이하 "위치서비스")의 이용에 대한 규정을 명시합니다. 회원은 위치서비스를 이용함에 있어 본 위치약관에 동의합니다.
+
+1. 위치정보의 수집
+당사는 회원의 위치정보를 수집하여, 주변 여행지 추천, 맞춤형 서비스 제공 등을 위해 이용합니다.
+
+2. 위치정보의 이용 목적
+실시간 위치를 기반으로 한 서비스 제공: 주변 관광지 안내 등
+통계 분석: 서비스 개선 및 마케팅 자료로 활용
+
+3. 위치정보의 제공
+당사는 회원의 위치정보를 제3자에게 제공하지 않으며, 회원의 동의 없이 외부에 공개하지 않습니다.
+
+4. 위치정보의 보유 및 이용 기간
+위치정보는 실시간 서비스 제공 후 일정 기간 동안만 보유하며, 해당 기간 이후에는 파기합니다.
+
+5. 동의 철회 및 서비스 중지
+회원은 언제든지 위치정보 제공에 대한 동의를 철회할 수 있으며, 철회 시 위치서비스 이용이 제한될 수 있습니다.
+        </textarea>
+      <div class="checkmsg choice">
+        <input type="checkbox" name="">
+        <label for="">[선택] 위치기반 서비스 이용약관</label>
+      </div>
+    </div>
+  </div> <!-- 약관 끝 -->
+  <!-- 회원가입화면 -->
+  <div class="join">
+    <div class="join_wrapper">
+      <form id="frm" action="/members/join" method="post">
+        <div>
+          <label for="memberId">아이디:</label>
+          <input type="text" id="memberId" name="memberId" required>
+          <input class="btnck" type="button" id="dupchkBtn" value="중복체크">
+          <span class="errmsg" id="errmsg_id"></span>
+        </div>
+        <div class="user user_email">
+          <div><label for="email">이메일</label></div>
+          <input type="email" id="email" name="email" required>
+          <input class="btnck" type="button" id="dupchkBtnEmail" value="중복체크">
+          <span class="errmsg" id="errmsg_email"></span>
+        </div>
+        <div class="user user_pw">
+          <div><label for="pw">비밀번호</label></div>
+          <input type="password" id="pw" name="pw" required>
+        </div>
+        <div class="user user_pw_check">
+          <div><label for="">비밀번호 확인</label></div>
+          <input type="password" name="" />
+        </div>
+        <div class="user user_nickname">
+          <div><label for="nickname">닉네임</label></div>
+          <input type="text" id="nickname" name="nickname" required>
+          <input class="btnck" type="button" id="dupchkBtnNickname" value="중복체크">
+          <span class="errmsg" id="errmsg_nickname"></span>
+        </div>
+        <div class="user user_address">
+          <div><label for="address">주소</label></div>
+          <input type="text" id="address" name="address" />
+        </div>
+
+        <div class="form_center">
+          <div class="user user_birth">
+            <div><label for="birthday">생년월일</label></div>
+            <input type="date" id="birthday" name="birthday" />
+          </div>
+          <div class="user user_phone">
+            <div><label for="tel">휴대폰번호</label></div>
+            <input type="text" id="tel" name="tel" />
+          </div>
+        </div>
+
+        <div class="user gender">
+          <input type="radio" id="female" name="gender" value="f" checked>
+          <label for="female">여</label>
+          <input type="radio" id="male" name="gender" value="m" />
+          <label for="male">남</label>
+        </div>
+        <input type="hidden" name="codeId" value="M0101">
+
+        <div class="checkmsg essential">
+          <input type="checkbox">
+          <label for="">[필수] 인증약관 동의</label>
+        </div>
+        <div class="submit_btn">
+          <input type="submit" value="회원가입">
+        </div>
+      </form>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- 푸터 -->
+<footer>
+  <div class="footer_main">
+    <p>트래블메이커</p>
+    <p>주소: 울산광역시 남구 삼산로35번길 19 (신정동) </p>
+    <p>Tel : 052-123-5678</p>
+  </div>
+  <!-- 푸터_카피라이트 -->
+  <div class="footer_copyright">
+    <p>Copyright © TravelMaker. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<!-- 스크립트 시작 -->
+<script src="./js/join.js"></script>
+
+</body>
+
+</html>

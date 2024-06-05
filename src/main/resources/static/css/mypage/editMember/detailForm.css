@@ -1,0 +1,106 @@
+body {
+  height: 100%;
+  /*전체 높이를 100%로 설정 */
+  margin: 0;
+  padding: 0;
+}
+
+
+section {
+  /* background-image: url('/img/track.jpg'); */
+  /* background-size: cover; */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-height: calc(100vh - 100px);
+  /*뷰포트의 높이에서 푸터 높이를 빼서 설정 */
+}
+
+.section_wrap {
+  width: 500px;
+  max-width: 1000px;
+  /* margin: 0 auto; */
+  padding: 30px;
+  margin-top: 100px;
+  /* background: rgba(191, 196, 221, 0.6); */
+  background-color: white;
+  border-radius: 40px;
+  box-shadow: 0px 2px 5px rgba(191, 196, 221, 0.9);
+  /* text-align: center; */
+}
+
+ /* 라벨과 인풋 */
+.section_wrap form div {
+  margin-bottom: 15px;
+
+}
+
+/* 회원정보 라벨 ex)아이디 닉네임 이메일 */
+.section_wrap form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* 회원정보 input */
+.section_wrap form input {
+  width: calc(100% - 20px);
+  padding: 2px 3px;
+  border: 1px solid #221b1b;
+  /* border-radius: 5px; */
+  /* 박스없애기 */
+  border: none;
+  border-bottom: 1px solid #cfcfcf;
+  position: relative;
+    /* Adds an underline */
+
+}
+
+/* input요소 밑줄 사이즈 반으로 줄이기 */
+#id, #nickname, #email {
+  width: 50%;
+}
+#tel {
+  width: 50%;
+}
+
+#birthday {
+ width: 25%
+ }
+
+#gender {
+  width:10%
+}
+
+/* 회원정보 수정 버튼 */
+#btnModify {
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#btnModify:hover {
+  background: #0056b3;
+}
+
+/* 비밀번호변경 버튼 */
+#btnChangePw {
+  text-decoration: none;
+  color: rgb(122, 142, 197);
+  /* font-weight: bold ; */
+  font-size: 14px;
+  margin-left: 160px; /*왼쪽으로 이동 */
+  background: none;  /* Remove background */
+  border: none;      /* Remove border */
+  padding: 0;        /* Remove padding */
+  cursor: pointer;
+  font-style: italic;
+}
+
+#btnChangePw:hover {
+  color: #3e399a;;
+}

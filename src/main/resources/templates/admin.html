@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>관리자 페이지</title>
+  <link href="/css/common/reset.css" rel="stylesheet">
+  <link href="/css/common/header.css" rel="stylesheet">
+  <link href="/css/common/footer.css" rel="stylesheet">
+  <link href="/css/admin.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="header">
+  <div class="header_wrapper">
+    <div class="header_start">
+      <a href="/selectMenu"><img src="/img/logo.png" alt="로고"></a>
+    </div>
+    <div class="header_center">
+      <p class="title_name">사이트 통계</p>
+    </div>
+    <!-- 회원인 경우 -->
+      <ul class="nav">
+        <a href="#" th:text="${session.loginMember.nickname}+'님'"></a>
+        <a class="logout" href="#" onclick="logout()">로그아웃</a>
+      </ul>
+  </div>
+</div>
+
+<div th:if="${session.loginMember != null and session.loginMember.codeId == 'M0102'}">
+  <div class="tab_content">
+    <div class="wrapper">
+      <input type="radio" name="tabmenu" id="tab01" checked>
+      <label for="tab01">회원 여/남 비율</label>
+      <input type="radio" name="tabmenu" id="tab02">
+      <label for="tab02">많이 작성한 여행지순</label>
+
+      <!-- 통계 -->
+      <div class="conbox con1">
+        <div class="plan_wrapper">
+           <img class="chart" th:src="@{${pieImg}}" alt="파이차트"/>
+        </div>
+      </div>
+
+      <!-- 시각화 -->
+      <div class="conbox con2">
+        <div class="plan_wrapper">
+          <img class="chart" th:src="@{${barImg}}" alt="바차트"/>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+</body>
+
+</html>

@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>여행지 검색</title>
+    <link href="/css/common/reset.css" rel="stylesheet" />
+    <link href="/css/common/header.css" rel="stylesheet" />
+    <link href="/css/common/footer.css" rel="stylesheet" />
+    <link href="/css/TravelSearch/travelList.css" rel="stylesheet" />
+    <script src="/js/TravelSearch/travelList.js" defer></script>
+</head>
+
+<!-- GET 방식 폼 -->
+<form id="searchForm" method="GET">
+    <input type="hidden" id="keyword" name="keyword" th:value="${keyword}" />
+    <input type="hidden" id="tagValues" name="tagValues" th:value="${tagValues}" />
+    <input type="hidden" id="typeValues" name="typeValues" th:value="${typeValues}" />
+    <input type="hidden" name="reqPage" value="" />
+    <input type="hidden" name="recCnt" value="" />
+    <input type="hidden" name="cpgs" value="" />
+    <input type="hidden" name="cp" value="" />
+</form>
+
+<body>
+    <!--헤더-->
+    <div class="header">
+        <div class="header_wrapper">
+            <div class="header_start">
+                <a href="/selectMenu"><img src="/img/logo.png" alt="로고" /></a>
+            </div>
+            <div class="header_center">
+                <p class="title_name">여행지 검색</p>
+            </div>
+            <!-- 회원인 경우 -->
+            <th:block th:if="${session.loginMember}">
+            <ul class="nav">
+                <a href="#" th:text="${session.loginMember.nickname}+'님'"></a>
+                <li class="dropdown">
+                    <a class="mypage" href="#">마이페이지</a>
+                    <ul class="dropdown_content">
+                        <li>
+                            <a class="myplan" href="/mypage">나의 여행일정</a>
+                        </li>
+                        <li>
+                            <a class="info_edit" th:href="@{'/members/' + ${session.loginMember.memberId}}">나의 정보수정</a>
+                        </li>
+                    </ul>
+                </li>
+                <a class="logout" href="#" onclick="logout()">로그아웃</a>
+            </ul>
+            </th:block>
+
+            <!-- 회원이 아닌경우 -->
+            <th:block th:unless="${session.loginMember}">
+            <ul class="nav">
+                <a href="#" th:text="비회원님"></a>
+                <a class="login" href="/login">로그인</a>
+                <a class="join" href="members/join">회원가입</a>
+            </ul>
+            </th:block>
+        </div>
+    </div>
+
+    <!--바디-->
+    <div class="section">
+        <div class="travel_search">
+            <div class="dividing_line">
+                <div>
+                    총
+                    <span class="travel_count" th:text="${totalCnt}"></span>건
+                </div>
+            </div>
+            <div class="travel_list">
+                <!-- 아이템 반복 시작 -->
+                <div class="travel_item" th:each="trvlspot:${list}" th:data-trvlspot-id="${trvlspot.trvlCd}">
+                    <div class="travel_img">
+                        <div class="overlay" th:text="${trvlspot.ragionNm}"></div>
+                        <img class="img" th:src="${trvlspot.img != null} ? ${trvlspot.img} : '/img/main_logo.png'" />
+                    </div>
+                    <div class="travel_detail">
+                        <div class="travel_name" th:text="${trvlspot.trvlNm}"></div>
+                    </div>
+                </div>
+                <!-- 아이템 종료-->
+            </div>
+        </div>
+
+        <div class="category">
+            <div class="category_fixed">
+                <div class="category_wrap">
+                    <div class="category_top">
+                        <div class="search_box">
+                            <input type="search" class="input_text" name="" id="" />
+                            <button class="input_button">검색</button>
+                        </div>
+                        <button class="refresh_btn">리셋</button>
+                    </div>
+                    <div class="dash"></div>
+                    <div class="category_center">
+                        <div class="city">
+                            <div class="city_row">
+                                <p class="tag" data-code="B0101">#서울</p>
+                                <p class="tag" data-code="B0106">#부산</p>
+                                <p class="tag" data-code="B0104">#대구</p>
+                                <p class="tag" data-code="B0117">#제주</p>
+                            </div>
+                            <div class="city_row">
+                                <p class="tag" data-code="B0102">#인천</p>
+                                <p class="tag" data-code="B0105">#광주</p>
+                                <p class="tag" data-code="B0103">#대전</p>
+                                <p class="tag" data-code="B0107">#울산</p>
+                            </div>
+                            <div class="city_row">
+                                <p class="tag" data-code="B0108">#세종</p>
+                                <p class="tag" data-code="B0109">#경기</p>
+                                <p class="tag" data-code="B0110">#강원</p>
+                                <p class="tag" data-code="B0111">#충북</p>
+                            </div>
+                            <div class="city_row">
+                                <p class="tag" data-code="B0112">#충남</p>
+                                <p class="tag" data-code="B0113">#경북</p>
+                                <p class="tag" data-code="B0114">#경남</p>
+                                <p class="tag" data-code="B0115">#전북</p>
+                            </div>
+                            <div class="city_row">
+                                <p class="tag" data-code="B0116">#전남</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dash"></div>
+                    <div class="category_bottom">
+                        <div class="travel_type">
+                            <p class="trvl_type">#관광지</p>
+                            <p class="trvl_type">#문화시설</p>
+                            <p class="trvl_type">#축제공연행사</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="pagination"></div>
+    <!-- 푸터 -->
+    <footer>
+        <div class="footer_main">
+            <p>트래블메이커</p>
+            <p>주소: 울산광역시 남구 삼산로35번길 19 (신정동)</p>
+            <p>Tel : 052-123-5678</p>
+        </div>
+        <!-- 푸터_카피라이트 -->
+        <div class="footer_copyright">
+            <p>Copyright © TravelMaker. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script type="module" th:inline="javascript" async>
+
+        import { Pagination } from '/js/common/paging.js';
+
+        let isRequestInProgress = false;
+
+        // SSR 페이징 객체 생성
+        const pagination = new Pagination(16, 10); // 한페이지에 보여줄 레코드건수,한페이지에 보여줄 페이지수
+        //총 레코드 건수
+        const totalCnt = [[${ totalCnt }]];
+
+        pagination.setCurrentPageGroupStart([[${ cpgs }]]); //페이지 그룹 시작번호
+        pagination.setCurrentPage([[${ cp }]]); //현재 페이지
+        pagination.setTotalRecords(totalCnt); //총레코드 건수
+        pagination.displayPagination(nextPage);
+
+        // next Page 받아올 SSR GET방식
+        function nextPage() {
+
+            if (isRequestInProgress) return; // 요청이 진행 중이면 중복 요청 방지
+
+            isRequestInProgress = true; // 요청 시작
+
+            const reqPage = pagination.currentPage;   //요청 페이지
+            const recCnt = pagination.recordsPerPage; //페이지당 레코드수
+            const cpgs = pagination.currentPageGroupStart; //페이지 그룹 시작번호
+            const cp = pagination.currentPage;            //현재 페이지
+
+
+            const reqPageInput = document.querySelector('input[name="reqPage"]');
+            const recCntInput = document.querySelector('input[name="recCnt"]');
+            const cpgsInput = document.querySelector('input[name="cpgs"]');
+            const cpInput = document.querySelector('input[name="cp"]');
+
+            reqPageInput.value = reqPage;
+            recCntInput.value = recCnt;
+            cpgsInput.value = cpgs;
+            cpInput.value = cp;
+
+
+            document.getElementById("searchForm").submit();
+        }
+
+        setTimeout(() => {
+            isRequestInProgress = false;
+        }, 1000);
+
+    </script>
+</body>
+
+</html>

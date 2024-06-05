@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>커뮤니티</title>
+    <link href="/css/common/reset.css" rel="stylesheet">
+    <link href="/css/common/header.css" rel="stylesheet">
+    <link href="/css/common/footer.css" rel="stylesheet">
+    <link href="/css/board/boardEdit.css" rel="stylesheet">
+  </head>
+</head>
+
+<body>
+<div class="header">
+  <div class="header_wrapper">
+    <div class="header_start">
+      <a href="/selectMenu"><img src="/img/logo.png" alt="로고"></a>
+    </div>
+    <div class="header_center">
+      <p class="title_name" onclick="location.href='/board/free';">커뮤니티</p>
+    </div>
+    <ul class="nav">
+      <a href="#" th:text="${session.loginMember.nickname}+'님'"></a>
+      <li class="dropdown">
+        <a class="mypage" href="#">마이페이지</a>
+        <ul class="dropdown_content">
+          <li><a class="myplan" href="/mypage">나의 여행일정</a></li>
+          <li><a class="info_edit" th:href="@{'/members/' + ${session.loginMember.memberId}}">나의 정보수정</a></li>
+        </ul>
+      </li>
+      <a class="logout" href="#" onclick="logout()">로그아웃</a>
+    </ul>
+  </div>
+</div>
+
+<div class="tab_content">
+  <div class="wrapper">
+    <input type="radio" name="tabmenu" id="tab01" checked>
+    <label for="tab01">수정하기</label>
+  </div>
+  <div class="wrapper">
+    <div class="conbox">
+      <form id="frm" th:action="@{/board/{bbsId}/edit(bbsId=${bbs.bbsId})}" method="post">
+        <div class="board_wrapper title">
+          <select id="boardSelect" class="form-select">
+            <option value="default">게시판선택</option>
+            <option value="F0101" th:selected="${bbs.codeId} == 'F0101'">자유게시판</option>
+            <option value="F0103" th:selected="${bbs.codeId} == 'F0103'">공유게시판</option>
+          </select>
+          <input id="title" name="title" type="text" th:value="${bbs.title}">
+        </div>
+        <div class="board_wrapper content">     
+          <div>
+            <textarea id="bContent" name="bContent" rows={1} th:text="${bbs.bContent}"></textarea>
+          </div>
+        </div>
+        <div id="btns">
+          <button class="btn" type="reset" value="리셋">리셋</button>
+          <button class="btn" type="button" value="목록" id="listBtn">목록</button>
+          <button class="btn" type="submit" value="저장" id="saveBtn">저장</button>
+        </div>
+      </form>
+
+      
+    </div>
+  </div>
+</div>
+
+
+<!-- 푸터 -->
+<footer>
+  <div class="footer_main">
+    <p>트래블메이커</p>
+    <p>주소: 울산광역시 남구 삼산로35번길 19 (신정동) </p>
+    <p>Tel : 052-123-5678</p>
+  </div>
+  <!-- 푸터_카피라이트 -->
+  <div class="footer_copyright">
+    <p>Copyright © TravelMaker. All Rights Reserved.</p>
+  </div>
+</footer>
+<script>
+  // 게시판 목록 버튼
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('listBtn').addEventListener('click', function () {
+      location.href = `/board/free`;
+    });
+  });
+
+  // 게시판 유효성 검사.
+  document.addEventListener("DOMContentLoaded", function() {
+      const boardSelect = document.getElementById("boardSelect");
+      const boardTitle = document.getElementById("title");
+      const boardContent = document.getElementById("bContent");
+      document.getElementById("frm").addEventListener("submit", function(event) {
+        if (boardSelect.value === "default") {
+          alert("게시판을 선택해 주세요.");
+          event.preventDefault();
+        }
+        if (boardTitle.value.trim() == "") {
+          alert("제목을 입력해 주세요.");
+          event.preventDefault();
+        }
+        if (boardContent.value.trim() == "") {
+          alert("내용을 입력해 주세요.");
+          event.preventDefault();
+        }
+      });
+    });
+
+
+  // // 게시판 내용창 길이 자동조절
+  // const textarea = document.getElementById('bContent');
+  // const DEFAULT_HEIGHT = 10;
+
+  // textarea.oninput = (event) => {
+  //   const $target = event.target;
+
+  //   $target.style.height = 0;
+  //   $target.style.height = DEFAULT_HEIGHT + $target.scrollHeight + 'px';
+  // };  
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,200 @@
+/* * {  outline: 1px solid red;} */
+header{
+  position : fixed;
+  top : 0;
+  left : 0;
+  width: 100%;
+  height: 100px;
+  background-color: #009efd;
+  box-shadow: 0 0 3px #000;
+  z-index : 20;
+}
+.header_wrapper {
+  display: flex;
+  height : 100px;
+  align-items: center;
+  justify-content: space-between;
+  padding : 0 16px;
+}
+
+.header_start {
+  height : 85px;
+  line-height: 85px;
+}
+
+.title_name {
+  font-size: 2em;
+}
+
+.reco {
+  font-size: 1.2em;
+
+}
+/* 기본 푸른색 버튼 스타일링 */
+.blue-button {
+  background-color: #007BFF; /* 기본 푸른색 배경 */
+  border: none; /* 테두리 제거 */
+  color: white; /* 글자 색을 흰색으로 설정 */
+  padding: 15px 30px; /* 상하 15px, 좌우 30px 여백 */
+  text-align: center; /* 텍스트 가운데 정렬 */
+  text-decoration: none; /* 텍스트 장식 제거 */
+  display: inline-block; /* 인라인 블록 요소로 설정 */
+  font-size: 16px; /* 폰트 크기 설정 */
+  margin: 4px 2px; /* 버튼 간의 간격 설정 */
+  cursor: pointer; /* 커서를 포인터로 변경 */
+  border-radius: 8px; /* 모서리를 둥글게 설정 */
+  transition: all 0.3s ease; /* 모든 변화에 대한 전환 효과 설정 */
+}
+
+
+/* 그라데이션 배경 버튼 */
+.gradient-button {
+  background: linear-gradient(45deg, #007BFF, #00D4FF); /* 그라데이션 배경 설정 */
+}
+
+.gradient-button:hover {
+  background: linear-gradient(45deg, #0056b3, #00aaff); /* 호버 시 그라데이션 색상 변경 */
+}
+
+/* 테두리 있는 버튼 */
+.outlined-button {
+  background-color: transparent; /* 배경 투명 설정 */
+  border: 2px solid #007BFF; /* 푸른색 테두리 설정 */
+  color: #007BFF; /* 글자 색을 푸른색으로 설정 */
+}
+
+.outlined-button:hover {
+  background-color: #007BFF; /* 호버 시 배경색 변경 */
+  color: white; /* 호버 시 글자 색 변경 */
+}
+
+/* 애니메이션 효과가 있는 버튼 */
+.animated-button {
+  position: relative;
+  overflow: hidden; /* 넘치는 부분을 숨김 */
+}
+
+.animated-button::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 300%;
+  height: 300%;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.5s ease;
+}
+
+.animated-button:hover::before {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+body{
+  height: 960px;
+  width: 1280px;
+}
+
+
+
+
+
+nav {
+  text-align: right; /* 부모 요소(nav)의 텍스트를 오른쪽 정렬 */
+}
+
+nav ul {
+  list-style: none; /* 목록 스타일 제거 */
+  padding: 0; /* 내부 여백 제거 */
+  margin: 0; /* 외부 여백 제거 */
+}
+
+nav ul li {
+  display: inline-block; /* 항목을 인라인 블록으로 표시하여 한 줄에 정렬 */
+  margin-left: 20px; /* 링크들 간의 간격 설정 */
+}
+
+nav ul li:first-child {
+  margin-left: 0; /* 첫 번째 링크의 왼쪽 마진 제거 */
+}
+.image-box img {
+  width: 100%; /* 이미지의 가로폭을 부모 요소에 맞추기 */
+  height: 500px; /* 이미지의 세로폭을 가로폭에 맞추어 자동 조절 */
+
+  display: block; /* 이미지가 가로폭을 자동 조절하기 위해 블록 요소로 설정 */
+}
+
+.image-box {
+  position: relative; /* 이미지 박스를 기준으로 절대 위치를 설정하기 위해 상대 위치로 설정 */
+}
+
+.boxes {
+  display: flex;
+  align-content: space-around;
+  position: absolute; /* 절대 위치로 설정하여 부모 요소를 기준으로 위치를 설정 */
+  top: 50%; /* 부모 요소의 상단을 기준으로 세로 중앙 정렬 */
+  left: 50%; /*부모 요소의 좌측을 기준으로 가로 중앙 정렬 */
+  transform: translate(-50%, -50%); /* 요소를 가운데로 이동 */
+}
+
+.box {
+  height: 150px;
+  width: 150px;
+  display: flex;
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+
+  background-color: rgba(255, 255, 255, 0.5); /* 투명한 배경색 */
+  padding: 10px; /* 내부 여백 설정 */
+  margin: 80px; /* 박스들 사이의 간격 설정 */
+}
+
+#logo{
+  margin: 10px;
+  width: 170px;
+  height: 50px;
+}
+
+#logojpg{
+  max-width: 100%; /* 이미지가 부모 요소 너비를 초과하지 않도록 함 */
+  max-height: 100%; /* 이미지가 부모 요소 높이를 초과하지 않도록 함 */
+}
+
+
+
+
+
+
+
+/* 푸터 */
+footer {
+
+  margin-top: 10px;
+  height: 100px;
+  background: linear-gradient(45deg, #007BFF, #00D4FF); /* 페이지 배경에 그라데이션 적용 */
+  font-size: 14px; /* 텍스트 크기 설정 */
+  font-weight: bold; /* 텍스트를 진하게 설정 */
+}
+footer p{
+  margin: 5px;
+}
+/* 푸터_카피라이트 */
+.footer_copyright{
+  margin-top: 10px;
+}

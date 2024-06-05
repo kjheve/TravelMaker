@@ -1,0 +1,241 @@
+.section {
+	margin: 125px 100px 5px 100px;
+	display: flex;
+	width: 94%;
+	height: 100%;
+}
+
+.travel_search {
+	width: 100%;
+	margin-right: 50px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.category {
+	width: 600px;
+	margin-right: 50px;
+	position: relative;
+}
+
+.category_fixed {
+	position: fixed;
+}
+
+/* --- 검색창 --- */
+
+.search_box {
+	display: flex;
+	width: 70%;
+}
+
+.input_text {
+	width: calc(100% - 60px);
+	height: 40px;
+	padding: 0 6px;
+	border: 1px solid #8f8f8f;
+	border-right: none;
+	border-radius: 2px 0 0 2px;
+}
+
+.input_button {
+	width: 60px;
+	height: 40px;
+	border: 1px solid #8f8f8f;
+	background-color: cornflowerblue;
+	border-left: none;
+	border-radius: 0 2px 2px 0;
+	color: white;
+	font-weight: bold;
+}
+
+.input_button:hover {
+	background-color: rgb(68, 125, 231);
+	cursor: pointer;
+}
+
+/* ------ */
+
+/* ------ dividing_line ------ */
+.dividing_line {
+	margin: 20px 0;
+	width: 100%;
+	height: 50px;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	display: flex;
+	justify-content: space-between;
+	line-height: 50px;
+}
+
+.dividing_line > div {
+	margin: 0 20px;
+}
+
+.travel_count {
+	font-weight: bold;
+	color: cornflowerblue;
+}
+
+/* --------travel_item----------- */
+
+.travel_list {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	padding-left: 80px;
+}
+
+.travel_item {
+	padding: 30px 40px;
+}
+
+.travel_img {
+	position: relative;
+}
+
+.travel_img img {
+	border: 1px solid #000;
+}
+
+.overlay {
+	position: absolute;
+	width: 200px;
+	height: 200px;
+	background-color: rgba(0, 0, 0, 0.5);
+	opacity: 0;
+	transition: opacity 1s;
+	color: white;
+	font-size: 1.5em;
+	text-align: center;
+	line-height: 200px;
+}
+
+.overlay:hover {
+	opacity: 1;
+	cursor: pointer;
+}
+
+.img {
+	width: 200px;
+	height: 200px;
+}
+
+.travel_detail {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 10px;
+	font-weight: bold;
+	width: 200px;
+}
+
+/* ---------오른쪽영역---------- */
+
+.category_wrap {
+	display: flex;
+	flex-direction: column;
+	width: 430px;
+	height: 450px;
+	background-color: rgb(230, 230, 230);
+	padding: 20px;
+}
+
+.city_row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin: 10px;
+	padding: 10px;
+}
+
+.city div > p,
+.travel_type > p {
+	padding: 5px;
+}
+
+.city div > p:hover,
+.travel_type > p:hover {
+	cursor: pointer;
+	background-color: cornflowerblue;
+	border-radius: 10px;
+	color: #fff;
+}
+
+.active {
+	background-color: cornflowerblue;
+	border-radius: 10px;
+	color: #fff;
+}
+
+.dash {
+	width: 100%;
+	border-bottom: 1px solid black;
+}
+
+.category_top {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
+.category_center {
+	height: 290px;
+}
+
+/* .category_bottom {
+} */
+
+.travel_type {
+	display: flex;
+	justify-content: space-between;
+	margin: 10px;
+	padding: 10px;
+}
+
+.travel_type > p {
+	text-align: center;
+}
+
+.refresh_btn {
+	background-color: cornflowerblue;
+	color: #fff;
+	padding: 5px;
+	border-radius: 5px;
+	border: none;
+	margin-right: 30px;
+}
+.refresh_btn:hover {
+	cursor: pointer;
+	background-color: rgb(68, 125, 231);
+}
+
+/* ----------- 페이징 --------- */
+#pagination {
+	margin: 20px 0 20px -200px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#pagination button {
+	background-color: cornflowerblue;
+	border: none;
+	color: #fff;
+	padding: 10px;
+	line-height: 100%;
+	margin: 0 5px;
+}
+
+#pagination button:hover {
+	cursor: pointer;
+	background-color: rgb(68, 125, 231);
+}
+
+#pagination button.active {
+	background-color: rgb(68, 125, 231);
+	font-size: 1.2rem;
+}
+/* -------- 페이징 끝 -------- */

@@ -1,0 +1,62 @@
+body {
+  height: 100%;
+  /*전체 높이를 100%로 설정 */
+  margin: 0;
+  padding: 0;
+}
+
+section {
+  background-image: url('/img/자갈.png');
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-height: calc(100vh - 100px);
+  /*뷰포트의 높이에서 푸터 높이를 빼서 설정 */
+}
+
+.section_wrap {
+  /* 박스를 상단으로 이동(음수로 적용) */
+  width: 400px;
+  /* 배경색, 마지막 0.6은 투명도 */
+  background-color: rgb(255, 255, 255, 0.6);
+  border-radius: 5px;
+  text-align: center;
+  padding: 30px;
+}
+
+input {
+  width: 80%;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+}
+/* 비밀번호, 비밀번호재입력 input */
+.input {
+  margin-bottom: 16px;
+}
+
+/* 비밀번호 변경 버튼 */
+#changePw_btn {
+  background-color: rgb(100, 149, 237);
+  /* margin-bottom: 30px; */
+  color: white;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  font-size: 14px; /* 버튼 내 폰트 사이즈 설정 */
+  padding: 10px 20px; /* 버튼의 크기 키우기 */
+  margin-top: 15px;
+}
+
+#pw_btn:hover {
+  background-color: rgb(71, 128, 234);
+}
+
+#error {
+  color: red;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 13px;
+}

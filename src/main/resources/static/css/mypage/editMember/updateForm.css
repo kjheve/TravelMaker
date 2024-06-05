@@ -1,0 +1,137 @@
+body {
+  height: 100%;
+  /*전체 높이를 100%로 설정 */
+  margin: 0;
+  padding: 0;
+}
+
+section {
+  /* background-image: url('/img/track.jpg'); */
+  /* background-size: cover; */
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-height: calc(100vh - 100px);
+  /*뷰포트의 높이에서 푸터 높이를 빼서 설정 */
+}
+
+.section_wrap {
+  width: 500px;
+  max-width: 1000px;
+  /* margin: 0 auto; */
+  padding: 30px;
+  margin-top: 100px;
+  /* background: rgba(191, 196, 221, 0.6); */
+  background-color: white;
+  border-radius: 40px;
+  box-shadow: 0px 2px 5px rgba(191, 196, 221, 0.9);
+  /* text-align: center; */
+}
+
+.section_wrap form div {
+  margin-bottom: 15px;
+
+}
+
+
+/* 회원정보 라벨 ex)아이디 닉네임 이메일 */
+.section_wrap form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+/* 회원정보 input */
+.section_wrap form input {
+  width: calc(100% - 20px);
+  padding: 2px 3px;
+  border: 1px solid #221b1b;
+  /* border-radius: 5px; */
+  /* 박스없애기 */
+  border: none;
+  border-bottom: 1px solid #cfcfcf;
+  position: relative;
+  /* Adds an underline */
+}
+
+/* input요소 밑줄 사이즈 반으로 줄이기 */
+#id, #nickname, #email {
+  width: 50%;
+
+}
+
+#email:read-only {
+  background-color: #f3f3f3; /* 회색으로 배경색 설정 */
+  color: #737373; /* 글자색을 어두운 회색으로 설정 */
+  border-bottom: none;
+}
+
+#id:read-only {
+  background-color: #f3f3f3; /* 회색으로 배경색 설정 */
+  color: #737373; /* 글자색을 어두운 회색으로 설정 */
+  border-bottom: none;
+}
+
+#nickname:read-only {
+  background-color: #f3f3f3; /* 회색으로 배경색 설정 */
+  color: #737373; /* 글자색을 어두운 회색으로 설정 */
+  border-bottom: none;
+}
+
+#tel {
+  width: 50%;
+}
+
+#birthday {
+ width: 25%
+ }
+
+#gender {
+  width:10%
+}
+
+/* 저장버튼 */
+form button {
+  padding: 10px 20px;
+  /* background-color: #4CAF50; */
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+/* 에러메세지 */
+.error-message {
+  color: #D8000C; /* 글꼴 색상을 빨간색으로 설정 */
+  margin: 10px 0; /* 위아래로 마진을 주어 주변 요소와의 거리를 두기 */
+  font-size:12px;
+  font-weight: bold; /* 글꼴을 굵게 */
+}
+
+/* 탈퇴버튼 */
+#btnDelete {
+ text-decoration: none;
+  color: rgb(122, 142, 197);
+  /* font-weight: bold ; */
+  font-size: 14px;
+  margin-left: 350px;
+  margin-bottom:20px;
+  background: none;  /* Remove background */
+  border: none;      /* Remove border */
+  padding: 0;        /* Remove padding */
+  cursor: pointer;
+  font-style: italic;
+}
+
+/* 취소버튼 */
+form button[type="button"] {
+  background-color: #df564c;
+  /* 다른 버튼과 구별되도록 색상을 변경합니다 */
+}
+
+form button[type="submit"]:hover,
+form button[type="button"]:hover {
+  opacity: 0.8;
+}
+

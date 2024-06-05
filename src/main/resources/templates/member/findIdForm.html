@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>아이디 찾기</title>
+  <link href="/css/common/reset.css" rel="stylesheet">
+  <link href="/css/common/header.css" rel="stylesheet">
+  <link href="/css/common/footer.css" rel="stylesheet">
+  <link href="/css/member/findIdForm.css" rel="stylesheet">
+</head>
+<body>
+  <div class="header">
+    <div class="header_wrapper">
+      <div class="header_start">
+        <a href="/selectMenu"><img src="/img/logo.png" alt="로고"></a>
+      </div>
+      <div class="header_center">
+        <p class="title_name">아이디찾기</p>
+      </div>
+      <ul class="nav">
+        <a class="reco" href="/travelSearch">여행지 검색</a>
+        <li class="dropdown">
+          <a class="mypage" href="#">마이페이지</a>
+          <ul class="dropdown_content">
+            <li><a class="myplan" href="#">나의 여행일정</a></li>
+            <li><a class="info_edit" href="#">나의 정보수정</a></li>
+          </ul>
+        </li>
+        <a class="login" href="/login">로그인</a>
+      </ul>
+    </div>
+  </div>
+
+<section>
+    <div class="section_wrap">
+      <div>
+        <form action="/members/findId" method="post">
+          <input type="email" placeholder="이메일" class="input" name="email" required>
+          <p style="color: red;">
+            <!-- 에러 메시지 표시 -->
+            <span id="error" th:if="${error}" th:text="${error}"></span>
+          </p>
+          <button type="submit" id="findIDbtn" value="아이디찾기">아이디 찾기</button>
+        </form>
+      </div>
+    </div>
+</section>
+
+<!-- 푸터 -->
+<footer>
+  <div class="footer_main">
+    <p>트래블메이커</p>
+    <p>주소: 울산광역시 남구 삼산로35번길 19 (신정동)</p>
+    <p>Tel: 052-123-5678</p>
+  </div>
+  <!-- 푸터_카피라이트 -->
+  <div class="footer_copyright">
+    <p>Copyright © TravelMaker. All Rights Reserved.</p>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원정보 수정</title>
+  <link href="/css/common/reset.css" rel="stylesheet" />
+  <link href="/css/common/header.css" rel="stylesheet" />
+  <link href="/css/common/footer.css" rel="stylesheet" />
+  <link href="/css/mypage/editMember/updateform.css" rel="stylesheet">
+  <script src="/js/logout.js"></script>
+</head>
+
+<body>
+<div class="header">
+  <div class="header_wrapper">
+    <div class="header_start">
+      <a href="/selectMenu"><img src="/img/logo.png" alt="로고"></a>
+    </div>
+    <div class="header_center">
+      <p class="title_name">회원정보 수정</p>
+    </div>
+    <ul class="nav">
+      <a href="#" th:text="${session.loginMember.nickname}+'님'"></a>
+      <li class="dropdown">
+        <a class="mypage" href="#">마이페이지</a>
+        <ul class="dropdown_content">
+          <li><a class="myplan" href="mypage">나의 여행일정</a></li>
+          <li><a class="info_edit" href="#">나의 정보수정</a></li>
+        </ul>
+      </li>
+      <a class="logout" href="#" onclick="logout()">로그아웃</a>
+    </ul>
+  </div>
+</div>
+
+<section>
+  <div class="section_wrap">
+    <form id="frm" th:action="@{/members/{memberId}/edit(memberId=${updateForm.memberId})}" method="post"
+          th:object="${updateForm}">
+      <input type="hidden" name="_method" value="PATCH" />
+      <button type="button" id="btnDelete" th:data-member-id="*{memberId}">탈퇴하기</button>
+      <div><label>회원아이디</label>
+        <input type="text" id="id" th:field="*{memberId}" readonly></div>
+      <div>
+        <label>닉네임</label>
+        <input type="text" th:field="*{nickname}" id="nickname" readonly>
+        <!--          <div id="nicknameStatus"></div>-->
+        <!--          <button type="button" onclick="checkDuplicateNickname()">중복확인</button>-->
+      </div>
+      <div><label>이메일</label>
+        <input type="email" id="email" th:field="*{email}" readonly></div>
+      <div><label>전화번호</label>
+        <input type="text" id="tel" th:field="*{tel}"></div>
+      <div th:if="${#fields.hasErrors('tel')}" th:errors="*{tel}" class="error-message">tel Error</div>
+      <div><label>성별</label>
+        <input type="text" id="gender" th:field="*{gender}"></div>
+      <div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" class="error-message">Gender Error</div>
+      <div><label>생년월일</label>
+        <input type="date" id="birthday" name="birthday" th:value="${updateForm.birthday}">
+      </div>
+      <div><label>주소</label>
+        <input type="text" id="address" th:field="*{address}"></div>
+      <div>
+        <button type="submit" id="saveButton">저장하기</button>
+        <button type="button" id="btnCancel">취소</button>
+      </div>
+    </form>
+    <div id="msg"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer_main">
+    <p>트래블메이커</p>
+    <p>주소: 울산광역시 남구 삼산로35번길 19 (신정동)</p>
+    <p>Tel : 052-123-5678</p>
+  </div>
+  <div class="footer_copyright">
+    <p>Copyright © TravelMaker. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script th:inline="javascript">
+  /*<![CDATA[*/
+  // 저장
+  document.getElementById('frm').addEventListener('submit', function(e) {
+    e.preventDefault(); // 기본 이벤트 막기
+    this.submit();
+  });
+
+  // 취소
+  document.getElementById('btnCancel').addEventListener('click', function() {
+    var memberId = /*[[${updateForm.memberId}]]*/ null;
+    if (memberId) {
+      location.href = '/members/' + memberId;
+    } else {
+      console.error('회원 아이디를 가져올 수 없습니다.');
+    }
+  });
+
+  // 탈퇴하기
+  document.getElementById('btnDelete').addEventListener('click', function() {
+    if (confirm('정말로 탈퇴하시겠습니까? 다시 되돌릴 수 없습니다.')) {
+      var memberId = /*[[${updateForm.memberId}]]*/ null;
+      if (memberId) {
+        // POST 요청 보내기
+        (async () => {
+          var url = '/members/' + memberId + '/del';
+          var options = {
+            method: 'POST'
+          };
+          var response = await fetch(url, options);
+          if (response.ok) {
+            alert('회원 탈퇴가 완료되었습니다.');
+            location.href = '/selectMenu';
+          } else {
+            alert('회원 탈퇴 처리에 실패하였습니다.');
+          }
+        })();
+      } else {
+        console.error('회원 아이디를 가져올 수 없습니다.');
+      }
+    }
+  });
+  /*]]>*/
+</script>
+
+</body>
+
+</html>

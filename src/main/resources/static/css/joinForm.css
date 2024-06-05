@@ -1,0 +1,135 @@
+section {
+  background-image: url('/img/비눗방울.jpg');
+  background-size: cover;
+  height: 800px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.provision {
+  margin-top: 85px;
+  background-color: rgb(255, 255, 255, 0.8);
+  height: 600px;
+  width: 50%;
+  padding: 20px;
+  margin-left: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-right: 1px dashed rgb(0, 0, 0, 0.2);
+}
+
+.provision_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.join {
+  margin-top: 85px;
+  background-color: rgb(255, 255, 255, 0.8);
+  height: 600px;
+  width: 50%;
+  margin-right: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.join_wrapper {
+  background-color: white;
+  border-radius: 20px;
+  padding: 0 60px;
+  height: 85%;
+  width: auto;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+/* ---------------레이아웃 끝---------------- */
+
+textarea {
+  resize: none;
+  width: 600px;
+  height: 90px;
+}
+
+.checkmsg {
+  margin-bottom: 30px;
+  margin-top: 5px;
+}
+
+.checkmsg.all {
+  font-weight: bold;
+}
+
+/* ----------회원가입-------- */
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"] {
+  border: none;
+  border-bottom: 1px solid #cfcfcf;
+}
+
+.btnck {
+  border: none;
+  border-radius: 5px;
+  color: white;
+  padding: 5px;
+  background-color: cornflowerblue;
+  box-shadow: 1px 1px 1px gray;
+  cursor: pointer;
+}
+
+.btnck:hover {
+  box-shadow: inset 2px 2px 2px gray;
+}
+
+.user_address>input[type="text"] {
+  width: 450px
+}
+
+.form_center {
+  display: flex;
+  justify-content: space-between;
+}
+
+.user.gender {
+  text-align: center;
+}
+
+.user {
+  margin-bottom: 12px;
+}
+
+/* --- */
+.submit_btn {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.submit_btn>input[type="submit"] {
+  background-color: rgb(100, 149, 237);
+  color: white;
+  border: none;
+  padding:10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.submit_btn>input[type="submit"]:disabled {
+  background-color: rgb(184, 202, 237);
+  cursor: initial;
+}
+
+.submit_btn>input[type="submit"]:not(:disabled):hover {
+  background-color: rgb(71, 128, 234);
+}
+

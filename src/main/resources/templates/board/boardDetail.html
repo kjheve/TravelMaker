@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>커뮤니티</title>
+  <link href="/css/board/boardDetail.css" rel="stylesheet">
+  <link href="/css/common/reset.css" rel="stylesheet">
+  <link href="/css/common/header.css" rel="stylesheet">
+  <link href="/css/common/footer.css" rel="stylesheet">
+
+</head>
+
+<body>
+<div class="header">
+  <div class="header_wrapper">
+    <div class="header_start">
+      <a href="/selectMenu"><img src="/img/logo.png" alt="로고"></a>
+    </div>
+    <div class="header_center">
+      <p class="title_name" onclick="location.href='/board/free';">커뮤니티</p>
+    </div>
+    <ul class="nav">
+      <a href="#" th:text="${session.loginMember.nickname}+'님'"></a>
+      <li class="dropdown">
+        <a class="mypage" href="#">마이페이지</a>
+        <ul class="dropdown_content">
+          <li><a class="myplan" href="/mypage">나의 여행일정</a></li>
+          <li><a class="info_edit" th:href="@{'/members/' + ${session.loginMember.memberId}}">나의 정보수정</a></li>
+        </ul>
+      </li>
+      <a class="logout" href="#" onclick="logout()">로그아웃</a>
+    </ul>
+  </div>
+</div>
+
+
+<div class="tab_content">
+  <div class="wrapper">
+    <input type="radio" name="tabmenu" id="tab01" checked>
+    <label for="tab01" th:text="${bbs.title}"></label>
+  </div>
+  <div class="wrapper">
+    <div class="conbox">
+      <div class="board_wrapper nickname">
+        <div><td>작성자 : </td><td id="nick" th:text="${bbs.nickname}"></td></div>
+        <div><td id="timestamp" th:text="${#temporals.format(bbs.cdate,'yyyy-MM-dd HH:mm')}"></td></div>
+      </div>
+      <div class="board_wrapper">
+        <div class="content">
+          <td th:text="${bbs.bContent}"></td>
+        </div>
+      </div>
+        <!-- 글 목록, 수정, 삭제 버튼 -->
+      <div class="btnWrap">
+        <div class="btns">
+          <button class="btn" type="button" value="목록" id="listBtn">목록</button>
+          <button id="goodBtn">♥</button>
+        </div>
+        <!-- 구라div   -->
+        <div></div>
+        <div class="btns" th:if="${session.loginMember.managementId == bbs.managementId}">
+          <button class="btn" type="button" value="수정" id="updateBtn">수정</button>
+          <button class="btn" type="button" value="삭제" id="delBtn">삭제</button>
+        </div>
+      </div>
+      <!-- 좋아요 댓글수  표시부분      -->
+      <div class="board_wrapper statics">
+        <div class="statics">
+          <div>
+            <h3 id="stats">조회 : 0 좋아요 : 0 </h3>
+          </div>
+          <div></div>
+        </div>
+      </div>
+
+
+      <!-- 댓글 입력 부분 -->
+      <div class="board_wrapper addform">
+        <form id="addForm">
+          <textarea id="textbox" placeholder="댓글을 입력하세요"></textarea>
+        </form>
+        <div class="attach-box">
+          <button id="aBtn" class="danchu">등록</button>
+        </div>
+      </div>
+      <!-- 댓글 표시 부분-->
+      <div class="board_wrapper comment">
+        <span>댓글&nbsp;&nbsp;</span>
+        <span id="commentCount"></span>
+      </div>
+      <div class="board_wrapper">
+        <div id="comments">
+          <!-- 댓글 목록이 여기에 표시됩니다 -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 푸터 -->
+<footer>
+  <div class="footer_main">
+    <p>트래블메이커</p>
+    <p>주소: 울산광역시 남구 삼산로35번길 19 (신정동) </p>
+    <p>Tel : 052-123-5678</p>
+  </div>
+  <!-- 푸터_카피라이트 -->
+  <div class="footer_copyright">
+    <p>Copyright © TravelMaker. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script th:inline="javascript">
+  // 로그인세션
+  let managementId = [[${session.loginMember.managementId}]]
+  let nickname = [[${session.loginMember.nickname}]]
+
+  // 조회수, 좋아요
+  let hit = [[${bbs.hit}]];
+  let good = [[${bbs.good}]];
+  console.log(hit);
+  console.log(good);
+
+  // 글 번호
+  let bbsId = [[${bbsId}]];
+  console.log(bbsId);
+
+  // 통계 정보 업데이트
+  function stats (hit, good){
+    const statsElement = document.getElementById('stats');
+    statsElement.innerHTML = `조회수 ${hit} &nbsp;&nbsp; 좋아요 ${good}`
+  };
+
+
+  // 게시판 목록 버튼
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('listBtn').addEventListener('click', function () {
+      location.href = `/board/free`;
+    });
+  });
+
+  // 게시판 수정 버튼
+  document.addEventListener('DOMContentLoaded', function () {
+  // "clickable-title" 클래스를 가진 모든 요소에 대해 함수를 실행합니다.
+    document.getElementById('updateBtn').addEventListener('click', function () {
+      location.href = `/board/${bbsId}/edit`;
+    });
+  });
+
+   // 게시판 삭제 버튼
+   document.addEventListener('DOMContentLoaded', function () {
+  // "clickable-title" 클래스를 가진 모든 요소에 대해 함수를 실행합니다.
+    document.getElementById('delBtn').addEventListener('click', function () {
+      if(confirm('정말 이 게시글을 삭제하시겠습니까?')){
+        fetch(`/board/${bbsId}/del`, {
+          method: 'POST', // POST 요청을 명시
+        }).then(response => {
+          // 요청이 성공적으로 처리되면 게시판 목록 페이지로 리다이렉트
+          if (response.ok) {
+            console.log('굳')
+            alert('게시글이 성공적으로 삭제되었습니다.')
+            location.href = '/board/free';
+          }
+        }).catch(error => {
+          // 에러 처리
+          console.error('Error:', error);
+          alert('게시글 삭제 중 오류가 발생했습니다.')
+        });
+      };
+    });
+
+  });
+
+  // 날짜 포맷팅 함수 정의
+  function formatCommentDate(cdate) {
+    return new Date(cdate).toLocaleString('ko-KR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
+  }
+
+  // 좋아요 버튼 이벤트
+  document.addEventListener('DOMContentLoaded', function() {
+  const goodBtn = document.getElementById('goodBtn');
+
+    goodBtn.addEventListener('click', function() {
+      fetch(`/board/${bbsId}/detail/${managementId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data.goodCnt);
+        if (data.goodCnt == 1) {
+          good += 1;        // 좋아요 수 1 증가
+          stats(hit, good); // 업데이트된 좋아요 수로 통계 정보 업데이트
+          alert('좋아요!');
+        } else {
+          alert('이미 좋아요를 누르셨습니다.');
+        }
+      })
+      .catch(error => {
+        console.error('좋아요 처리 중 오류가 발생했습니다.', error);
+      });
+    });
+  });
+
+  // 등록
+  document.getElementById('aBtn').addEventListener('click', async function (evt) {
+
+    evt.preventDefault();
+
+    // 댓글 입력 폼
+    let rbbsText = document.getElementById('textbox').value.trim();
+    console.log(rbbsText);
+    if(rbbsText === null || rbbsText === ''){
+      alert("댓글을 입력하세요!")
+      return;
+    }
+    const url = `/board/${bbsId}/comment`;
+    const payload = {
+      bbsId: bbsId,
+      managementId: managementId,     // 로그인 세션 managementId
+      nickname: nickname,             // 로그인 세션 nickname
+      bContent: rbbsText
+    };
+    const option = {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify(payload),
+    };
+    try {
+      const res = await fetch(url, option);
+      if (!res.ok) throw new Error('서버 오류 발생');
+      const result = await res.json();
+      // 성공
+      if (result.header && result.header.rtcd == '00') {
+        document.getElementById('textbox').value = '';
+        await loadComments(bbsId);
+      } else {
+        throw new Error(result.header.errMsg || '댓글 등록 실패!');
+      }
+    } catch (err) {
+      console.error(err.message);
+      alert(err.message);
+    }
+  });
+
+  // 페이지 로드 시 댓글 리스트를 불러옴
+  document.addEventListener('DOMContentLoaded', function () {
+    loadComments(bbsId);
+  });
+
+  async function loadComments(bbsId) {
+    try {
+      const response = await fetch('/board/' + bbsId + '/comment');
+      if (!response.ok) {
+        throw new Error('네트워크 응답이 올바르지 않습니다.');
+      }
+      const data = await response.json();
+      console.log(data);
+      let commentsHtml = '';
+      data.forEach(function (comment) {
+        const formattedDate = formatCommentDate(comment.cdate);
+        commentsHtml += `
+              <div id="comment-${comment.rbbsId}" class="comment_option">
+                <ul class="comment_list">
+                  <li type="hidden" id="${comment.rbbsId}" class="commentItem">
+                    <div class="comment_box">
+                      <div class="nick_box">
+                        <a class="nick_info">
+                          ${comment.nickname}
+                        </a>
+                      </div>
+                      <div class="text_box">
+                        <div class="text_comment">${comment.bContent}</div>
+                        <div class="comment_date">${formattedDate}</div>
+                      </div>
+                    </div>
+                  </li>
+                </ul>`;
+        if (comment.managementId == managementId)
+        commentsHtml +=
+             `<div class="Btns" data-id="${comment.rbbsId}">
+                <button class="editBtn" data-id="${comment.rbbsId}">수정</button>
+                <button class="deleteBtn" data-id="${comment.rbbsId}">삭제</button>
+              </div>`;
+        commentsHtml +=  `</div>`
+      });
+      document.getElementById('comments').innerHTML = commentsHtml;
+
+      // 좋아요 조회수 불러오기
+      stats (hit, good)
+
+      // 댓글 수 업데이트
+      const commentCount = document.querySelectorAll('.comment_option').length;
+      document.getElementById('commentCount').innerText = commentCount;
+      console.log(commentCount);
+
+
+      // 댓글 수정 버튼 클릭 이벤트 리스너 추가
+      document.querySelectorAll('.editBtn').forEach(function (button) {
+        button.addEventListener('click', function () {
+          let commentId = this.parentElement.getAttribute('data-id');
+          editComment(commentId);
+        });
+      });
+
+      // 댓글 삭제 버튼 클릭 이벤트 리스너 추가
+      document.querySelectorAll('.deleteBtn').forEach(function (button) {
+        button.addEventListener('click', function () {
+          let commentId = this.parentElement.getAttribute('data-id');
+          deleteComment(commentId);
+        });
+      });
+    } catch (error) {
+      console.error('댓글 목록을 가져오는 데 실패했습니다.', error);
+    }
+  }
+
+  function editComment(commentId) {
+    console.log("수정버튼누름");
+
+    const commentDiv = document.getElementById(`comment-${commentId}`);
+
+    const buttonsDiv = commentDiv.querySelector('.Btns');
+
+    const editBtn = buttonsDiv.querySelector('.editBtn');
+    const deleteBtn = buttonsDiv.querySelector('.deleteBtn');
+    const text_comment = commentDiv.querySelector('.text_comment');
+
+    console.log(text_comment);
+
+
+    // 숨김 처리
+    text_comment.style.display = 'none';
+    editBtn.style.display = 'none';
+    deleteBtn.style.display = 'none';
+
+    // textarea와 저장, 취소 버튼 생성
+    const textarea = document.createElement('textarea');
+    textarea.value = text_comment.textContent;
+    textarea.classList.add('form_control');
+
+    const saveBtn = document.createElement('button');
+    saveBtn.textContent = '저장';
+    saveBtn.classList.add('danchu');
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.textContent = '취소';
+    cancelBtn.classList.add('danchu');
+
+    // textarea와 버튼들 추가
+    text_comment.parentNode.insertBefore(textarea, text_comment.nextSibling);
+    buttonsDiv.appendChild(saveBtn);
+    buttonsDiv.appendChild(cancelBtn);
+
+    // 저장버튼
+    saveBtn.addEventListener('click', function() {
+    let newContent = textarea.value.trim();
+    if (newContent !== "") {
+      fetch('/board/' + bbsId + '/comment/' + commentId, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ bContent: newContent })
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('댓글 수정에 실패했습니다.');
+          }
+          return response.json();
+        })
+        .then(data => {
+          alert('댓글이 성공적으로 수정되었습니다.');
+          loadComments(bbsId); // 페이지를 새로고침하여 변경된 내용을 반영
+        })
+        .catch(error => {
+          console.error('댓글 수정 중 오류가 발생했습니다.', error);
+        });
+      } else {
+        alert("댓글을 입력해 주세요!");
+        return;
+      }
+    })
+
+    // 취소버튼
+    cancelBtn.addEventListener('click', function() {
+      // 수정 전 상태로 복원
+      textarea.remove(); // textarea 제거
+      saveBtn.remove(); // 저장 버튼 제거
+      cancelBtn.remove(); // 취소 버튼 제거
+
+      // 원래의 댓글 및 버튼들을 다시 표시
+      text_comment.style.display = '';
+      editBtn.style.display = '';
+      deleteBtn.style.display = '';
+    });
+
+  }
+
+  // 댓글 삭제
+  function deleteComment(commentId) {
+    console.log(commentId);
+    if (confirm('정말 이 댓글을 삭제하시겠습니까?')) {
+      fetch('/board/' + bbsId + '/comment/' + commentId, {
+        method: 'DELETE'
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('댓글 삭제에 실패했습니다.');
+          }
+          alert('댓글이 성공적으로 삭제되었습니다.');
+          loadComments(bbsId); // 페이지를 새로고침하여 변경된 내용을 반영
+        })
+        .catch(error => {
+          console.error('댓글 삭제 중 오류가 발생했습니다.', error);
+        });
+    }
+  }
+
+
+
+</script>
+
+</body>
+
+</html>

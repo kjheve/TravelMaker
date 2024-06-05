@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>로그인</title>
+  <link href="./css/common/reset.css" rel="stylesheet">
+  <link href="./css/common/header.css" rel="stylesheet">
+  <link href="./css/common/footer.css" rel="stylesheet">
+  <link href="./css/login.css" rel="stylesheet">
+  <script src="/js/login.js" defer></script>
+</head>
+
+<body>
+<div class="header">
+  <div class="header_wrapper">
+    <div class="header_start">
+      <a href="/selectMenu"><img src="img/logo.png" alt="로고"></a>
+    </div>
+    <div class="header_center">
+      <p class="title_name">로그인</p>
+    </div>
+    <ul class="nav">
+      <a class="join" href="members/join">회원가입</a>
+    </ul>
+  </div>
+</div>
+
+<section>
+  <div class="login_wrap">
+    <!-- 서버에서 전송된 메시지를 표시 -->
+    <p class="message" th:if="${message}" th:text="${message}"></p>
+
+    <form id="frm" action="/login" method="post">
+      <input type="text" placeholder="아이디" class="input" id="memberId" name="memberId">
+      <span class="errmsg" id="errMemberId"></span>
+      <input type="password" placeholder="비밀번호" class="input" id="pw" name="pw">
+      <span class="errmsg" id="errPw"></span>
+      <input type="submit" id="loginbtn" value="로그인"><br>
+    </form>
+    <a href="members/findId">ID 찾기</a>
+    <span>|</span>
+    <a href="members/findPw">PW 찾기</a>
+    <a href="members/join">회원가입</a>
+  </div>
+</section>
+
+<!-- 푸터 -->
+<footer>
+  <div class="footer_main">
+    <p>트래블메이커</p>
+    <p>주소: 울산광역시 남구 삼산로35번길 19 (신정동) </p>
+    <p>Tel : 052-123-5678</p>
+  </div>
+  <!-- 푸터_카피라이트 -->
+  <div class="footer_copyright">
+    <p>Copyright © TravelMaker. All Rights Reserved.</p>
+  </div>
+</footer>
+
+</body>
+
+</html>

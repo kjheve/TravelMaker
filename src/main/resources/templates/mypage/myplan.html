@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>여행플래너 관리</title>
+		<link href="/css/common/reset.css" rel="stylesheet" />
+		<link href="/css/common/header.css" rel="stylesheet" />
+		<link href="/css/common/footer.css" rel="stylesheet" />
+		<link href="/css/mypage/myplan.css" rel="stylesheet" />
+		<script src="/js/mypage/myplan.js" defer></script>
+		<script src="/js/logout.js"></script>
+	</head>
+
+	<body>
+		<!--헤더-->
+		<div class="header">
+			<div class="header_wrapper">
+				<div class="header_start">
+					<a href="/selectMenu"
+						><img src="/img/logo.png" alt="로고"
+					/></a>
+				</div>
+				<div class="header_center">
+					<p class="title_name">나의 일정</p>
+				</div>
+				<ul class="nav">
+					<a href="#" th:text="${session.loginMember.nickname}+'님'"></a>
+					<li class="dropdown">
+						<a class="mypage" href="#">마이페이지</a>
+						<ul class="dropdown_content">
+							<li>
+								<a class="myplan" href="/mypage">나의 여행일정</a>
+							</li>
+							<li>
+								<a class="info_edit" th:href="@{'/members/' + ${session.loginMember.memberId}}">나의 정보수정</a>
+							</li>
+						</ul>
+					</li>
+					<a class="logout" href="#" onclick="logout()">로그아웃</a>
+				</ul>
+			</div>
+		</div>
+
+		<form
+			id="checkFrom"
+			autocomplete="off"
+			action="/travelmaker/final"
+			method="post"
+		>
+			<input type="hidden" name="planId" />
+			<input type="hidden" name="ragionNm" />
+			<input type="hidden" name="trvlStd" />
+			<input type="hidden" name="trvlLsd" />
+		</form>
+
+		<div class="tab_content">
+			<div class="wrapper">
+				<input type="radio" name="tabmenu" id="tab01" checked />
+				<label for="tab01">나의 일정</label>
+				<input type="radio" name="tabmenu" id="tab02" />
+				<label for="tab02">나의 여행기록</label>
+
+				<!-- 나의 일정 -->
+				<div class="conbox con1">
+					<div class="plan_wrapper">
+						<!-- 반복시작 -->
+						<div
+							class="plan_item"
+							th:each="item:${forwardTravel}"
+							th:data-plan-id="${item.planId}"
+						>
+							<div class="plan_img">
+								<img
+									class="thumbs_img"
+									th:src="@{'/img/region/' + ${item.ragionNm} + '.jpg'}"
+									alt="지역 이미지"
+								/>
+							</div>
+
+							<div class="plan_detail">
+								<div class="detail_top">
+									<div
+										class="dday"
+										th:text="'D-' + ${item.D_day}"
+									></div>
+									<div
+										class="area"
+										th:text="${item.ragionNm}"
+									></div>
+									<div class="btn_wrap">
+										<button class="delBtn">❌</button>
+									</div>
+								</div>
+
+								<div class="detail_center">
+									<div><br /></div>
+									<!-- <div class="travel_name">
+                여행이름 (한줄 여행기록)
+              </div> -->
+								</div>
+
+								<div class="detail_bottom">
+									<div
+										class="travel_date"
+										th:text="${item.trvlStd} + '~' + ${item.trvlLsd}"
+									></div>
+									<div
+										class="travel_period"
+										th:text="${item.travelDays} + '일간'"
+									></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 나의 일정 태그 끝 -->
+
+				<!-- 나의 여행기록 -->
+				<div class="conbox con2">
+					<div class="plan_wrapper">
+						<!-- 반복시작 -->
+						<!-- 반복시작 -->
+						<div
+							class="plan_item"
+							th:each="item:${lastTravel}"
+							th:data-plan-id="${item.planId}"
+						>
+							<div class="plan_img">
+								<img
+									class="thumbs_img"
+									th:src="@{'/img/region/' + ${item.ragionNm} + '.jpg'}"
+									alt="지역 이미지"
+								/>
+							</div>
+
+							<div class="plan_detail">
+								<div class="detail_top">
+									<div
+										class="dday"
+										th:text="'D+' + ${item.D_day}"
+									></div>
+									<div
+										class="area"
+										th:text="${item.ragionNm}"
+									></div>
+									<div class="btn_wrap">
+                    <button class="delBtn">❌</button>
+									</div>
+								</div>
+
+								<div class="detail_center">
+									<div><br /></div>
+									<!-- <div class="travel_name">
+                여행이름 (한줄 여행기록)
+              </div> -->
+								</div>
+
+								<div class="detail_bottom">
+									<div
+										class="travel_date"
+										th:text="${item.trvlStd} + '~' + ${item.trvlLsd}"
+									></div>
+									<div
+										class="travel_period"
+										th:text="${item.travelDays} + '일간'"
+									></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- 나의 여행기록 태그 끝 -->
+			</div>
+		</div>
+
+		<!-- 푸터 -->
+		<footer>
+			<div class="footer_main">
+				<p>트래블메이커</p>
+				<p>주소: 울산광역시 남구 삼산로35번길 19 (신정동)</p>
+				<p>Tel : 052-123-5678</p>
+			</div>
+			<!-- 푸터_카피라이트 -->
+			<div class="footer_copyright">
+				<p>Copyright © TravelMaker. All Rights Reserved.</p>
+			</div>
+		</footer>
+	</body>
+</html>

@@ -1,0 +1,41 @@
+/* findPw.css */
+
+/* 섹션에 배경 이미지 설정 */
+section {
+  background-image: url('/img/자갈.png');
+  background-size: cover;
+  height: 750px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.findPw_wrap {
+  margin-top: 85px;
+  width: 400px;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+  text-align: center;
+  padding: 30px;
+}
+
+input {
+  width: 80%;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+}
+
+.input {
+  margin-bottom: 10px;
+}
+
+#findPwbtn {
+  background-color: rgb(100, 149, 237);
+  color: white;
+  cursor: pointer;
+}
+
+#findPwbtn:hover {
+  background-color: rgb(71, 128, 234);
+}

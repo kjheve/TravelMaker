@@ -1,0 +1,15 @@
+footer {
+  padding: 10px;
+  height: 100px;
+  background: linear-gradient(45deg, #007BFF, #00D4FF); /* 페이지 배경에 그라데이션 적용 */
+  font-size: 14px; /* 텍스트 크기 설정 */
+  font-weight: bold; /* 텍스트를 진하게 설정 */
+}
+footer p{
+  margin: 0 20px 0 20px;
+  color: white;
+}
+/* 푸터_카피라이트 */
+.footer_copyright{
+  margin-top: 10px;
+}
